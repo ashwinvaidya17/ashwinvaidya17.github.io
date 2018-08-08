@@ -3,23 +3,23 @@
   <channel>
     <title>Ashwin Vaidya's Blog</title>
     <description></description>
-    <link>http://www.ashwinvaidya.com</link>
-    <atom:link href="/feed.xml" rel="self" type="application/rss+xml" />
+    <link>https://www.ashwinvaidya.com</link>
+    <atom:link href="/blog//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
         <title>A.I That Writes Its Own A.I</title>
         <description></description>
         <pubDate>Wed, 08 Aug 2018 00:00:00 +0530</pubDate>
-        <link>/posts/ai-that-writes-its-own-ai</link>
-        <guid isPermaLink="true">/posts/ai-that-writes-its-own-ai</guid>
+        <link>/blog//posts/ai-that-writes-its-own-ai</link>
+        <guid isPermaLink="true">/blog//posts/ai-that-writes-its-own-ai</guid>
       </item>
     
       <item>
         <title>K-MeansClustering</title>
         <description></description>
         <pubDate>Sun, 05 Aug 2018 00:00:00 +0530</pubDate>
-        <link>/posts/k-meansclustering</link>
-        <guid isPermaLink="true">/posts/k-meansclustering</guid>
+        <link>/blog//posts/k-meansclustering</link>
+        <guid isPermaLink="true">/blog//posts/k-meansclustering</guid>
       </item>
     
   </channel>

@@ -1179,7 +1179,7 @@ img {
 
 @font-face {
   font-family: ionicons;
-  src: url("/assets/ionicons/ionicons.eot?#iefix") format("embedded-opentype"), url("/assets/ionicons/ionicons.woff") format("woff"), url("/assets/ionicons/ionicons.ttf") format("truetype"); }
+  src: url("/blog/assets/ionicons/ionicons.eot?#iefix") format("embedded-opentype"), url("/blog/assets/ionicons/ionicons.woff") format("woff"), url("/blog/assets/ionicons/ionicons.ttf") format("truetype"); }
 .icon {
   display: inline-block;
   width: 1.1em;
