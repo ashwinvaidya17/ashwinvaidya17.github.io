@@ -4,22 +4,38 @@
     <title>Ashwin Vaidya's Blog</title>
     <description></description>
     <link>https://www.ashwinvaidya.com</link>
-    <atom:link href="/blog//feed.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="/blog/feed.xml" rel="self" type="application/rss+xml" />
+    
+      <item>
+        <title>Tech In Fitness Trackers</title>
+        <description></description>
+        <pubDate>Tue, 14 Aug 2018 00:00:00 +0530</pubDate>
+        <link>/blog/posts/tech-in-fitness-trackers</link>
+        <guid isPermaLink="true">/blog/posts/tech-in-fitness-trackers</guid>
+      </item>
+    
+      <item>
+        <title>Brain Machine Interfaces</title>
+        <description></description>
+        <pubDate>Tue, 14 Aug 2018 00:00:00 +0530</pubDate>
+        <link>/blog/posts/brain-machine-interfaces</link>
+        <guid isPermaLink="true">/blog/posts/brain-machine-interfaces</guid>
+      </item>
     
       <item>
         <title>A.I That Writes Its Own A.I</title>
         <description></description>
         <pubDate>Wed, 08 Aug 2018 00:00:00 +0530</pubDate>
-        <link>/blog//posts/ai-that-writes-its-own-ai</link>
-        <guid isPermaLink="true">/blog//posts/ai-that-writes-its-own-ai</guid>
+        <link>/blog/posts/ai-that-writes-its-own-ai</link>
+        <guid isPermaLink="true">/blog/posts/ai-that-writes-its-own-ai</guid>
       </item>
     
       <item>
         <title>K-MeansClustering</title>
         <description></description>
         <pubDate>Sun, 05 Aug 2018 00:00:00 +0530</pubDate>
-        <link>/blog//posts/k-meansclustering</link>
-        <guid isPermaLink="true">/blog//posts/k-meansclustering</guid>
+        <link>/blog/posts/k-meansclustering</link>
+        <guid isPermaLink="true">/blog/posts/k-meansclustering</guid>
       </item>
     
   </channel>

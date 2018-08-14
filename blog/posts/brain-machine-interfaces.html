@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>Ashwin Vaidya's Blog | Brain Machine Interfaces</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:title" content="Brain Machine Interfaces">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.ashwinvaidya.com/blog/posts/brain-machine-interfaces">
+  <meta property="og:description" content="">
+  <meta property="og:site_name" content="Ashwin Vaidya's Blog">
+  <meta property="og:image" content="https://www.ashwinvaidya.com/blog/blog/assets/og-image.jpg">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:url" content="https://www.ashwinvaidya.com/blog/posts/brain-machine-interfaces">
+  <meta name="twitter:title" content="Brain Machine Interfaces">
+  <meta name="twitter:description" content="">
+  <meta name="twitter:image" content="https://www.ashwinvaidya.com/blog/blog/assets/og-image.jpg">
+
+  <link rel="apple-touch-icon" href="/blog/assets/apple-touch-icon.png">
+  <link href="https://www.ashwinvaidya.com/blog/feed.xml" type="application/rss+xml" rel="alternate" title="Ashwin Vaidya's Blog Last 10 blog posts" />
+
+  
+
+  
+    <link rel="stylesheet" href="/blog/assets/dark.css">
+
+  
+</head>
+
+<body>
+  <main>
+    <div class="grid grid-centered">
+      <div class="grid-cell">
+        <nav class="header-nav appear">
+  <a href="/blog/" class="header-logo" title="Ashwin Vaidya's Blog">Ashwin Vaidya's Blog</a>
+  <ul class="header-links">
+    
+    
+      <li>
+        <a href="https://twitter.com/ashwinvaidya17" rel="noreferrer noopener" target="_blank" title="Twitter">
+          <span class="icon icon-twitter"></span>
+        </a>
+      </li>
+    
+    
+    
+      <li>
+        <a href="https://github.com/ashwinvaidya17" rel="noreferrer noopener" target="_blank" title="GitHub">
+          <span class="icon icon-github"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+      <li>
+        <a href="https://www.linkedin.com/in/ashwinvaidya17" rel="noreferrer noopener" target="_blank" title="LinkedIn">
+          <span class="icon icon-linkedin"></span>
+        </a>
+      </li>
+    
+    
+    
+    
+      <li>
+        <a href="/blog/feed.xml" rel="noreferrer noopener" target="_blank" title="RSS">
+          <span class="icon icon-rss"></span>
+        </a>
+      </li>
+    
+  </ul>
+</nav>
+
+        <article class="article appear">
+          <header class="article-header">
+            <h1>Brain Machine Interfaces</h1>
+            <p></p>
+            <div class="article-list-footer">
+              <span class="article-list-date">
+                August 14, 2018
+              </span>
+              <span class="article-list-divider">-</span>
+              <span class="article-list-minutes">
+                
+                
+                  6 minute read
+                
+              </span>
+              <span class="article-list-divider">-</span>
+              <div class="article-list-tags">
+                
+                  <a href="/blog/tag/tech">tech</a>
+                
+              </div>
+            </div>
+          </header>
+
+          <div class="article-content">
+            <p><em>This was originally poublished in June’17 issue of MCUG newsletter</em></p>
+
+<p>Remember the Matrix? Neo had these plugs connected to him which helped him enter the Matrix, where he could move,feel, fly or even stop bullets in mid air. Or the movie Avatar, where Jake lies in a capsule which helps him control the Avatar. Sure they are all science fiction, but are we really far off from having our brain directly connected to a computer? Well, yes and no. While research is being made toward restoring motor functions of the physically disabled by giving robotics limbs that they can control with their mind(so Avatar is covered), we are still far from entering our favourite game  or any virtual environment(Matrix has to wait for a while).
+This article attempts to explain how these technological feats are being achieved and where are we headed.</p>
+
+<h2 id="first-the-brain-machine-interface">First, The Brain Machine Interface?</h2>
+
+<p>Think of brain like a remote control controlling your body. When you think of moving your arm, the brain sends a signal through the nerves passing through your spinal cord. The spine and the intermediate nerves can be thought analogous to a channel. Now imagine that you tap the connections in between and send and receive artificial signals. You could project a movie directly to your visual cortex without having to wear a VR headset. Or even better, send all motor functions to a computer and send all sensory functions from computer to brain and you will be able to physically(in a way as all the brain perceives of the physical world is from the senses) enter a game. This sounds sci-fi-ish, but early uses of this technology have already shown results. This technology is known as Brain Machine Interface (BMI) or Brain Computer Interface (BCI).
+BMI is the direct connection pathway between brain and an external device. It performs two functions: recording neurons and stimulating neurons. It is not always necessary to have bidirectional communication between the machine and the brain. Hearing aids for example only need to stimulate the neurons. There are three broad criteria in designing BMIs.</p>
+
+<ol>
+  <li>Scale: number of neurons that can be simultaneously recorded.</li>
+  <li>Resolution: how detailed is the information the tool receives—there are two types of resolution; spatial (how closely your recordings come to telling you how individual neurons are firing) and temporal (how well you can determine when the activity you record happened)</li>
+  <li>Invasiveness: is surgery needed, and if so, how extensively.</li>
+</ol>
+
+<h2 id="the-brain">The Brain</h2>
+
+<p>To understand how to interface the brain with any device we have to know how the brain works. So, here is an oversimplified explanation of the brain. Brain is a densely packed complex structure. It is made up of hundreds of billions of neurons. Each neuron’s axon has a negative “resting potential”, which means that when it’s at rest, its electrical charge is slightly negative. And it is connected to many dendrites of other neurons. These dendrites release neurotransmitters which raise or lower the charge on the neurons. If the neuron’s charge rises over a certain threshold the neuron triggers. Now if we have a network of such neurons we get a neural network. We have many such networks in our brain which are responsible for various tasks. Let’s call them modules for now.<br />
+This is how Ray Kurzweil explains this in his 2014 TED Talk, “ Consider a simple example. We’ve got a bunch of modules that can recognize the crossbar to a capital A, and that’s all they care about.They don’t care if a song is playing or you are seeing a movie, but when they see a crossbar to a capital A, they get very excited and they say “crossbar,” . That goes to the next level. Each is more abstract than the next one, so the next one might say “capital A.” That goes up to a higher level that might say “Apple.” Go up another five levels, and you’re now at a pretty high level of this hierarchy, and stretch down into the different senses, and you may have a module that sees a certain fabric, hears a certain voice quality, smells a certain perfume, and will say, “My friend has entered the room.” Go up another 10 levels, and now you’re at a very high level. You’ll have modules that say, “That was ironic. That’s funny. She is pretty.” You might think that those are more sophisticated, but actually what’s more complicated is the hierarchy beneath them.” 
+So now you would have an idea of how complicated the functioning of the brain is. The challenge lies in interfacing such a complex biological machine to a silicon based one. Well, researchers have found few means to interface the two and some of them are already in use.</p>
+
+<h2 id="how-to-read-and-stimulate-neurons">How to read and stimulate neurons?</h2>
+
+<p>Consider the task of moving an artificial arm. You need to read the motor signals from the brain and send them to the computer which will tell the arm to move. This still does not solve the entire problem. The patient does not feel the artificial limb like it was his/her own arm, the way you would feel when say you lift your arm. This inability to be aware of the position of one’s limb is called ‘proprioception’. Overcoming this requires a feedback to the brain from the limb.</p>
+
+<p>A commonly used but invasive (requires opening the skull) technique is to implant electrodes in the brain which can stimulate neurons, or record their activity. The non-invasive techniques can however only record.</p>
+
+<p>A few examples of current generation BMI tools are, fMRI (functional magnetic resonance imaging), EEG (electroencephalography), ECoG (electrocorticography), LFP (Local Field Potential), Single-Unit Recording. A technology under research is ‘neural lace’. It is an ultra-thin mesh that can be implanted in the skull, forming a collection of electrodes capable of monitoring brain function. To insert neural lace, a tiny needle containing the rolled up mesh is placed inside the skull and the mesh is injected. As the mesh leaves the needle it unravels, spanning the brain. Another idea is nano ferrous dust that can be dissolved in water, which then reaches the brain through blood stream and under changing magnetic field heats up due to hysteresis. This then triggers its nearby neurons.</p>
+
+<h2 id="possibilities">Possibilities</h2>
+
+<p>BMI technology is still in its infancy but, the future holds endless possibilities. We will able to restore the full motor functions of paraplegics or quadriplegics. Imagine having your brain connected to the internet. You will have access to all the information just by thinking. And to take it a little further, imagine being connected to an AI which helps you think when you need. You will be able to offload heavy thinking tasks to the AI without even realising it. Even communication between individuals will improve as we will not be limited to using words and be able to send emotions directly. You will be able to store, share and re-experience your experiences from the cloud. Live streaming will happen from person’s point of view and you will be able to hear and smell whatever they hearing or smelling. And imagine having ability tweak internally, like removing addiction, depression and anxiety. Imagine representing something uncomfortable like pain to something like an auditory bell. Probably schools and colleges will not exist in the future. People will be expert in every field. You will be able to make yourself smarter by just downloading the required skills. You can then say like Neo, “I know kung-fu”. And who knows? You might have subscription services like “On Demand Intelligence ”.</p>
+
+<h2 id="sources">Sources:</h2>
+
+<p><a href="https://www.ted.com/talks/ray_kurzweil_get_ready_for_hybrid_thinking">https://www.ted.com/talks/ray_kurzweil_get_ready_for_hybrid_thinking</a>
+<a href="http://waitbutwhy.com/2017/04/neuralink.html">http://waitbutwhy.com/2017/04/neuralink.html</a>
+<a href="https://www.youtube.com/watch?v=6Qi5uoNYXqg">https://www.youtube.com/watch?v=6Qi5uoNYXqg</a>
+<a href="https://en.wikipedia.org/wiki/Brain%E2%80%93computer_interface">https://en.wikipedia.org/wiki/Brain%E2%80%93computer_interface</a>
+<a href="http://www.techworld.com/data/what-is-neural-lace-3657074/">http://www.techworld.com/data/what-is-neural-lace-3657074/</a></p>
+
+          </div>
+
+          <div class="article-share">
+            
+            
+            <a href="https://twitter.com/home?status=Brain+Machine+Interfaces - https://www.ashwinvaidya.com/blog/posts/brain-machine-interfaces by @ashwinvaidya17" title="Share on Twitter" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 512 512"><path d="M492 109.5c-17.4 7.7-36 12.9-55.6 15.3 20-12 35.4-31 42.6-53.6 -18.7 11.1-39.4 19.2-61.5 23.5C399.8 75.8 374.6 64 346.8 64c-53.5 0-96.8 43.4-96.8 96.9 0 7.6 0.8 15 2.5 22.1 -80.5-4-151.9-42.6-199.6-101.3 -8.3 14.3-13.1 31-13.1 48.7 0 33.6 17.2 63.3 43.2 80.7C67 210.7 52 206.3 39 199c0 0.4 0 0.8 0 1.2 0 47 33.4 86.1 77.7 95 -8.1 2.2-16.7 3.4-25.5 3.4 -6.2 0-12.3-0.6-18.2-1.8 12.3 38.5 48.1 66.5 90.5 67.3 -33.1 26-74.9 41.5-120.3 41.5 -7.8 0-15.5-0.5-23.1-1.4C62.8 432 113.7 448 168.3 448 346.6 448 444 300.3 444 172.2c0-4.2-0.1-8.4-0.3-12.5C462.6 146 479 129 492 109.5z"/></svg>
+            </a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.ashwinvaidya.com/blog/posts/brain-machine-interfaces" title="Share on Facebook" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 512 512"><path d="M288 192v-38.1c0-17.2 3.8-25.9 30.5-25.9H352V64h-55.9c-68.5 0-91.1 31.4-91.1 85.3V192h-45v64h45v192h83V256h56.4l7.6-64H288z"/></svg>
+            </a>
+            <a href="https://plus.google.com/share?url=https://www.ashwinvaidya.com/blog/posts/brain-machine-interfaces" title="Share on Google+" rel="noreferrer noopener" target="_blank">
+              <svg viewBox="0 0 128 128"><path d="M40.7 55.9v16.1c0 0 15.6 0 22 0C59.2 82.5 53.8 88.2 40.7 88.2c-13.3 0-23.7-10.8-23.7-24.2s10.4-24.2 23.7-24.2c7.1 0 11.6 2.5 15.8 5.9 3.3-3.3 3.1-3.8 11.6-11.9 -7.2-6.6-16.8-10.6-27.4-10.6C18.2 23.3 0 41.5 0 64c0 22.5 18.2 40.7 40.7 40.7 33.6 0 41.8-29.3 39-48.8H40.7zM113.9 56.7V42.6h-10.1v14.1H89.4v10.1h14.5v14.5h10.1V66.8H128V56.7H113.9z"/></svg>
+            </a>
+          </div>
+
+          
+            <div id="disqus_thread" class="article-comments"></div>
+            <script src="https://ashwinvaidya.disqus.com/embed.js" async defer></script>
+            <noscript>Please enable JavaScript to view the comments.</noscript>
+          
+        </article>
+        <footer class="footer appear">
+  <p>
+    Chalk is a high quality, completely customizable, performant and 100% free
+    blog template for Jekyll built by
+    <a href="/blog/about" title="About me">Nielsen Ramon</a>. Download it <a href="https://github.com/nielsenramon/chalk" rel="noreferrer noopener" target="_blank" title="Download Chalk">here</a>.
+  </p>
+</footer>
+
+      </div>
+    </div>
+  </main>
+  
+  <script>
+    window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;
+    ga('create','UA-123420588-1','auto');ga('send','pageview')
+  </script>
+  <script src="https://www.google-analytics.com/analytics.js" async></script>
+
+
+<script src="/blog/assets/vendor.js"></script>
+
+
+
+  <script src="/blog/assets/webfonts.js"></script>
+
+
+
+
+  <script src="/blog/assets/scrollappear.js"></script>
+
+
+
+<script src="/blog/assets/application.js"></script>
+
+
+</body>
+</html>
