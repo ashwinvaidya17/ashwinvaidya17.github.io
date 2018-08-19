@@ -2,15 +2,15 @@
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>https://www.ashwinvaidya.com/blog/tag/design/</loc>
-<lastmod>2018-08-14T19:33:08+05:30</lastmod>
+<lastmod>2018-08-19T20:55:08+05:30</lastmod>
 </url>
 <url>
 <loc>https://www.ashwinvaidya.com/blog/tag/jekyll/</loc>
-<lastmod>2018-08-14T19:33:08+05:30</lastmod>
+<lastmod>2018-08-19T20:55:08+05:30</lastmod>
 </url>
 <url>
 <loc>https://www.ashwinvaidya.com/blog/tag/web/</loc>
-<lastmod>2018-08-14T19:33:08+05:30</lastmod>
+<lastmod>2018-08-19T20:55:08+05:30</lastmod>
 </url>
 <url>
 <loc>https://www.ashwinvaidya.com/blog/posts/k-meansclustering</loc>
@@ -27,6 +27,10 @@
 <url>
 <loc>https://www.ashwinvaidya.com/blog/posts/tech-in-fitness-trackers</loc>
 <lastmod>2018-08-14T00:00:00+05:30</lastmod>
+</url>
+<url>
+<loc>https://www.ashwinvaidya.com/blog/posts/linear-regression</loc>
+<lastmod>2018-08-19T00:00:00+05:30</lastmod>
 </url>
 <url>
 <loc>https://www.ashwinvaidya.com/blog/about</loc>
