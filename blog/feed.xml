@@ -7,6 +7,14 @@
     <atom:link href="/blog/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Elon Musk vs Neil Degrasse Tyson Image Classifier Using Tensorflow</title>
+        <description></description>
+        <pubDate>Fri, 24 Aug 2018 00:00:00 +0530</pubDate>
+        <link>/blog/posts/elonmusk-vs-neildegrassetyson-classifier</link>
+        <guid isPermaLink="true">/blog/posts/elonmusk-vs-neildegrassetyson-classifier</guid>
+      </item>
+    
+      <item>
         <title>Self Driving Car using Genetic Algorithm in Unity Engine</title>
         <description></description>
         <pubDate>Tue, 21 Aug 2018 00:00:00 +0530</pubDate>
