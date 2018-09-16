@@ -7,6 +7,14 @@
     <atom:link href="/blog/feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>What is Machine Learning?</title>
+        <description>Introduction to machine learning, supervised learning and unsupervised learning</description>
+        <pubDate>Sun, 16 Sep 2018 00:00:00 +0530</pubDate>
+        <link>/blog/posts/what-is-machine-learning</link>
+        <guid isPermaLink="true">/blog/posts/what-is-machine-learning</guid>
+      </item>
+    
+      <item>
         <title>AI Environment Types</title>
         <description>Brief overview of the classifications of environments in artificial intelligence</description>
         <pubDate>Wed, 12 Sep 2018 00:00:00 +0530</pubDate>
@@ -76,14 +84,6 @@
         <pubDate>Wed, 08 Aug 2018 00:00:00 +0530</pubDate>
         <link>/blog/posts/ai-that-writes-its-own-ai</link>
         <guid isPermaLink="true">/blog/posts/ai-that-writes-its-own-ai</guid>
-      </item>
-    
-      <item>
-        <title>K-MeansClustering</title>
-        <description></description>
-        <pubDate>Sun, 05 Aug 2018 00:00:00 +0530</pubDate>
-        <link>/blog/posts/k-meansclustering</link>
-        <guid isPermaLink="true">/blog/posts/k-meansclustering</guid>
       </item>
     
   </channel>
