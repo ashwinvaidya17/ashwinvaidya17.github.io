@@ -1,0 +1,139 @@
+[
+  
+    {
+      "title"    : "Creating Neural Network from Scratch in Python",
+      "category" : "",
+      "tags"     : "artificial neural network, neural network, and python",
+      "url"      : "/blog/creating-neural-network-from-scratch-in-python/",
+      "date"     : "2019-05-01 20:56:32 +0530"
+    } ,
+  
+    {
+      "title"    : "Fashion MNIST Loader",
+      "category" : "",
+      "tags"     : "dataset, fashion, mnist, and python",
+      "url"      : "/blog/fashion-mnist-loader/",
+      "date"     : "2019-04-29 17:55:13 +0530"
+    } ,
+  
+    {
+      "title"    : "Q Learning",
+      "category" : "",
+      "tags"     : "ml, q-learning, reinforcement learning, and rl",
+      "url"      : "/blog/q-learning/",
+      "date"     : "2019-03-17 15:07:48 +0530"
+    } ,
+  
+    {
+      "title"    : "A Very Basic Introduction to Artificial Neural Network",
+      "category" : "",
+      "tags"     : "ANN, artificial neural network, Deep Learning, and ml",
+      "url"      : "/blog/a-very-basic-introduction-to-artificial-neural-network/",
+      "date"     : "2019-01-29 13:25:13 +0530"
+    } ,
+  
+    {
+      "title"    : "Overfitting vs Underfitting",
+      "category" : "",
+      "tags"     : "MachineLearning, ml, supervised, and unsupervised",
+      "url"      : "/blog/overfitting-vs-underfitting/",
+      "date"     : "2019-01-24 20:24:33 +0530"
+    } ,
+  
+    {
+      "title"    : "K Nearest Neighbors",
+      "category" : "",
+      "tags"     : "KNN, MachineLearning, ml, and python",
+      "url"      : "/blog/k-nearest-neighbors/",
+      "date"     : "2018-12-13 18:50:00 +0530"
+    } ,
+  
+    {
+      "title"    : "What is Machine Learning?",
+      "category" : "",
+      "tags"     : "ai and ml",
+      "url"      : "/blog/what-is-machine-learning/",
+      "date"     : "2018-09-16 09:25:14 +0530"
+    } ,
+  
+    {
+      "title"    : "AI Environment Types",
+      "category" : "",
+      "tags"     : "ai and ml",
+      "url"      : "/blog/ai-environment-types/",
+      "date"     : "2018-09-12 09:23:36 +0530"
+    } ,
+  
+    {
+      "title"    : "What is Artificial Intelligence",
+      "category" : "",
+      "tags"     : "ml and tech",
+      "url"      : "/blog/what-is-artificial-intelligence/",
+      "date"     : "2018-09-10 09:19:42 +0530"
+    } ,
+  
+    {
+      "title"    : "Decision Trees",
+      "category" : "",
+      "tags"     : "decision tree, MachineLearning, ml, python, sklearn, and supervised",
+      "url"      : "/blog/decision-tree/",
+      "date"     : "2018-09-01 09:16:57 +0530"
+    } ,
+  
+    {
+      "title"    : "Elon Musk vs Neil Degrasse Tyson Image Classifier Using Tensorflow",
+      "category" : "",
+      "tags"     : "elon musk, ml, neil degrasse tyson, and tech",
+      "url"      : "/blog/elonmusk-vs-neildegrassetyson-classifier/",
+      "date"     : "2018-08-24 09:14:11 +0530"
+    } ,
+  
+    {
+      "title"    : "Self Driving Car using Genetic Algorithm in Unity Engine",
+      "category" : "",
+      "tags"     : "game, genetic algorithm, ml, neural network, unity, and unity3d",
+      "url"      : "/blog/self-driving-car-using-genetic-algorithm-in-unity/",
+      "date"     : "2018-08-21 09:07:27 +0530"
+    } ,
+  
+    {
+      "title"    : "Linear Regression",
+      "category" : "",
+      "tags"     : "linear regression, python, and tutorial",
+      "url"      : "/blog/linear-regression/",
+      "date"     : "2018-08-19 09:03:25 +0530"
+    } ,
+  
+    {
+      "title"    : "Tech In Fitness Trackers",
+      "category" : "",
+      "tags"     : "fitness, machine learning, tech, and trackers",
+      "url"      : "/blog/tech-in-fitness-trackers/",
+      "date"     : "2018-08-14 08:54:04 +0530"
+    } ,
+  
+    {
+      "title"    : "Brain Machine Interfaces",
+      "category" : "",
+      "tags"     : "",
+      "url"      : "/blog/brain-machine-interfaces/",
+      "date"     : "2018-08-14 08:49:57 +0530"
+    } ,
+  
+    {
+      "title"    : "A.I That Writes Its Own A.I",
+      "category" : "",
+      "tags"     : "google, ml, and tech",
+      "url"      : "/blog/ai-that-writes-its-own-ai/",
+      "date"     : "2018-08-08 08:39:54 +0530"
+    } ,
+  
+    {
+      "title"    : "K-Means Clustering",
+      "category" : "",
+      "tags"     : "k-means, ml, tutorial, and unsupervised",
+      "url"      : "/blog/k-meansclustering/",
+      "date"     : "2018-08-05 08:15:48 +0530"
+    } 
+  
+]
