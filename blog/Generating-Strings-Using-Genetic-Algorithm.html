@@ -6,10 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Overfitting vs Underfitting</title>
+  <title>Generating Strings Using Genetic Algorithm</title>
   <meta name='description' content='Computer Engineer, Space Buff'>
 
-  <link rel="canonical" href="/blog/overfitting-vs-underfitting/">
+  <link rel="canonical" href="/blog/Generating-Strings-Using-Genetic-Algorithm">
   <link rel="alternate" type="application/rss+xml" title="Ashwin Vaidya" href="/feed.xml">
 
   <!-- Google Font -->
@@ -134,7 +134,7 @@
 	<div class="row">
 		<div class="col col-12">
 			<div class="post-image-box">
-				<div class="post-image" style="background-image: url(/img//wp-content/uploads/2019/01/house_prices-overfit-unknown.png)"></div>
+				<div class="post-image" style="background-image: url(/img/stringCrossover.png)"></div>
 			</div>
 		</div>
 	</div>
@@ -149,17 +149,13 @@
 					
 					<div class="post-tag">
 						
-						<a href="/tags#MachineLearning" class="tag">MachineLearning</a>
+						<a href="/tags#python" class="tag">python</a>
 						
-						<a href="/tags#ml" class="tag">ml</a>
-						
-						<a href="/tags#supervised" class="tag">supervised</a>
-						
-						<a href="/tags#unsupervised" class="tag">unsupervised</a>
+						<a href="/tags#genetic algorithm" class="tag">genetic algorithm</a>
 						
 					</div>
 					
-					<h1 class="post-title">Overfitting vs Underfitting</h1>
+					<h1 class="post-title">Generating Strings Using Genetic Algorithm</h1>
 					<div class="post-info">
 						<div class="post-info-author">
 							<div class="info-author-avatar" style="background-image: url(/img/profile.jpg)"></div>
@@ -168,86 +164,136 @@
 						</div>
 						<div class="post-date">
 							<span>
-								<time datetime="2019-01-24T20:24:33+05:30">Jan 24, 2019</time>
+								<time datetime="2019-07-14T13:58:44+05:30">Jul 14, 2019</time>
 							</span>
 						</div>
 					</div>
 				</div>
 
 				<div class="post-body">
-					<p>Supervised learning tasks are divided into two types, classification and regression. In classification tasks, the machine learning model has to find the decision boundary between the class variables. For example, classifying whether a given image is of a star or a supernova.</p>
+					<h1 id="generating-strings-using-genetic-algorithm">Generating Strings Using Genetic Algorithm</h1>
 
-<p><img src="/img/wp-content/uploads/2019/01/classification-300x300.png" alt="" /></p>
+<p>We have always looked at nature and tried to understand its processes. Understanding the movement of planets and stars gave us the theory of gravity. It enabled us to send humans to Moon and soon will help us reach Mars.</p>
 
-<p><strong>Classification</strong></p>
+<p>Even with all our understanding of various physical processes, nature has still managed to keep one of the greatest mystery to itself - one of intelligence.</p>
 
-<p><img src="/img/wp-content/uploads/2019/01/classification-boundary-300x300.png" alt="" /></p>
-
-<p><strong>With decision boundary</strong></p>
-
-<p style="text-align:center">
-  Note: This is a toy example and the actual plots and parameters may vary.
-</p>
-
-<p>In regression tasks, the machine learning model has to predict continuous values such as stock prices. Here, the model needs to find the best fit curve that approximates the unknown mapping function.</p>
-
-<p><img src="/img/wp-content/uploads/2019/01/stocks-300x300.png" alt="" /></p>
-
-<p><strong>Stock Prices</strong></p>
-
-<p><img src="/img/wp-content/uploads/2019/01/stocks-predicted-300x296.png" alt="" /></p>
-
-<p><strong>Predicting continuous values</strong></p>
-
-<p>In the following discussion, I will focus on the regression example, but the idea presented is applicable to classification tasks as well.</p>
-
-<p>Consider the following data points for the task of predicting house prices.</p>
-
-<p>Now, a curve can be fit onto the data which gives some prediction on the data.</p>
-
-<p><img src="/img/wp-content/uploads/2019/01/house_prices-linear-1024x1024.png" alt="" /></p>
-
-<p>However, we can come up with a better fit onto the data.</p>
-
-<p><img src="/img/wp-content/uploads/2019/01/house_prices-good-1024x1024.png" alt="" /></p>
-
-<p>And what about the following curve? It passes through all the points.</p>
-
-<p><img src="/img/wp-content/uploads/2019/01/house_prices-overfit-1024x1024.png" alt="" /></p>
-
-<p>Surely, this is the best curve, right? No! Even though it fits the data well, it does not <em>generalize well</em>. What do I mean by generalizing? Consider that that we now have access to more data points.</p>
-
-<p><img src="/img/wp-content/uploads/2019/01/house_prices-overfit-unknown-1024x1024.png" alt="" /></p>
-
-<p>This clearly does fit the new data. This model has internalized the training data. There is no guarantee that the data not yet observed will map to this equation. The prediction might be way off. What we need is a trade-off. Something that fits the original data and can predict the unknown data with realibility.</p>
-
-<h2 id="overfitting">Overfitting</h2>
+<p>Humans have tried modelling intelligence using various approaches. The current models are based on the connectionist idea. The idea that modelling the connections in the brain is the path to intelligence. Earlier approaches were driven by the idea that given a lot of data and solid rules, the system would behave intelligently. These were called expert systems.</p>
 
 <blockquote>
-  <p>When the model does not generalize well for new data but fits the training data too well, it is called overfitting.</p>
+  <p>If you want to read more about the connectionist approach here is the <a href="https://ashwinvaidya.com/blog/a-very-basic-introduction-to-artificial-neural-network/">introduction</a> and <a href="https://ashwinvaidya.com/blog/creating-neural-network-from-scratch-in-python/">implementation</a></p>
 </blockquote>
 
-<p><img src="/img/wp-content/uploads/2019/01/house_prices-overfit-1024x1024.png" alt="" /></p>
+<p>In this post, I am going to explain the algorithm which is responsible for the diversity of this planet - Genetic Algorithm</p>
 
-<h2 id="underfitting">Underfitting</h2>
+<p>This algorithm can also lead to intelligent behaviour. The first time I saw this video</p>
+<iframe src="https://www.youtube.com/embed/bBt0imn77Zg" frameborder="0" allowfullscreen=""></iframe>
+<p>I was amazed by how close the behaviour is to real organisms. Further, this algorithm was also used in my <a href="https://ashwinvaidya.com/blog/self-driving-car-using-genetic-algorithm-in-unity/">autonomous car</a> project.</p>
 
-<blockquote>
-  <p>When the model does not generalize well and does not even fit the training data, it is called underfitting.</p>
-</blockquote>
+<h2 id="what-is-genetic-algorithm">What is Genetic Algorithm?</h2>
 
-<p><img src="/img/wp-content/uploads/2019/01/house_prices-linear-1024x1024.png" alt="" /></p>
+<p>Let’s talk about biology first.</p>
 
-<p>Hey! You have reached the end 😎. Thanks for reading.</p>
+<p>The sexual mode of reproduction largely contributes to the diversity of species and within species. A male and a female of the same species produce an offspring. The offspring inherits traits from both the parents. It gets half of its genes from its mother and half from its father. These genes dictate what feature the offspring will have. An offspring may inherit blue eyes from its mother and dark hair from its father.</p>
 
-<p>I would appreciate if you leave a comment below. Your suggestions will help me improve.</p>
+<p><img src="/img/geneticTransfer.png" alt="" /></p>
 
-<p>Subscribe to stay updated and say Hi! to me on <a href="https://twitter.com/ashwinvaidya17">twitter</a> if you wish to.</p>
+<p>However, there is never a perfect copy of a gene. Some errors creep in. Theses are called mutations.</p>
+
+<p><img src="/img/mutation.png" alt="" /></p>
+
+<p>A mutation might help the offspring weather heat than its parents or peers. This process over thousands of individuals leads to the diversity and survivability of the species.</p>
+
+<h2 id="creating-a-genetic-program">Creating a Genetic Program</h2>
+
+<p>Now that we have made our excursions into biology lets come back to programming. I won’t be focusing on applying genetic algorithm to intelligence in this post but will teach you the nuts and bolts of it. In the end, you will learn to use it for your projects too.</p>
+
+<h2 id="generating-strings">Generating Strings</h2>
+
+<p>For the explanation we will generate a target string using the genetic algorithm.</p>
+
+<p>Consider the target string: <em>Hustle Life.</em></p>
+
+<p>We start by generating a random population of strings with the same length as the target string.</p>
+
+<p>Here are three examples of the first generation:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>J.Ktr TeRf.q
+.Y wlei P eZ
+nuRR .. Oxic
+</code></pre></div></div>
+
+<p>Now, for each member of the population, we calculate the fitness.</p>
+
+<p>Fitness for this example is defined as the number of characters in the correct place.</p>
+
+<p>For the first string above, characters t and f are in the same position as the target string. So, the fitness of the first string becomes 2.</p>
+
+<p>Similarly, for the second and third-string, the fitness is 3 and 1 respectively.</p>
+
+<p>Now that we have calculated fitness for each member of the population, we now create a mating pool. A mating pool is a list of members of the population is proportional to their fitness. The member with the higher fitness is present in greater number in the mating pool. The idea is that member with the higher fitness has a higher probability of selection as a parent than the member with lower fitness.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>matingPool = []
+for each member in the population:
+    fitness = fitness of the member/maxFitness
+    n = math.floor(fitness * 100)
+    for i from 1 to n:
+        matingPool.append(member)
+</code></pre></div></div>
+
+<p>A small example of the mating pool is</p>
+
+<p><img src="/img/matingPool.png" alt="" /></p>
+
+<p>[Parent A, Parent A, Parent A, Parent B, Parent B, Parent C]</p>
+
+<p>Here Parent A has the highest fitness and Parent C has the lowest.</p>
+
+<p><em>A quick in the example and the math in the pseudo-code above:
+In the example, Parent A has max count 3. However, the parent with the highest fitness will have a count of 100 in our mating pool. This is because the fitness of the member equals max fitness and hence the ratio will be 1. Since it is then multiplied by 100, the value of n will be 100.</em></p>
+
+<h3 id="second-generation">Second Generation</h3>
+
+<p>The second generation is created from the mating pool.</p>
+
+<p>First two parents are selected from the mating pool. Then, a child is created by combining genes from both the parents. The term for this combination is called crossover. The genes of this child are mutated. This child now becomes a member of the second generation population.</p>
+
+<p>The process of selecting two parents and then crossover and mutation is repeated to create each member of the second generation. This generation will also have the population count of the first generation.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>for i from 1 to length of population:
+    parentA = randomChoice(matingPool)
+    parentB = randomChoice(matingPool)
+    child = crossover parentA and parentB
+    mutate child
+    add child to next population
+</code></pre></div></div>
+
+<p>In case of strings we do the crossover as follows:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>midpoint = calculate a random number from 1 to length of the target string
+child = parentA[0:mid point] + parentB[midpoint: length of string]
+</code></pre></div></div>
+
+<p><img src="/img/stringCrossover.png" alt="" /></p>
+
+<p>To mutate the string we need a mutation rate. Suppose the mutation rate is 0.01.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>for each character in child string:
+    n = random number from 0 to 1
+    if n &lt; 0.01 (mutation rate):
+        character = random character
+</code></pre></div></div>
+
+<p>That is it! Running this simple algorithm for a few generations gives us our target string.</p>
+
+<p>You can find the Python code <a href="https://github.com/ashwinvaidya17/GeneticAlgorithm-Strings">here</a>.</p>
+
+<p>Thanks for reading 😎</p>
 
 
 					<div class="post-share">
 						<ul class="share-list list-reset">
 							<li class="share-item">
-								<a class="share-facebook" href="https://www.facebook.com/sharer/sharer.php?u=/blog/overfitting-vs-underfitting/"
+								<a class="share-facebook" href="https://www.facebook.com/sharer/sharer.php?u=/blog/Generating-Strings-Using-Genetic-Algorithm"
 								onclick="window.open(this.href, 'pop-up', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;"
 								title="Share on Facebook" rel="nofollow">
 									<i class="ion ion-logo-facebook"></i>
@@ -255,7 +301,7 @@
 							</li>
 					
 							<li class="share-item">
-								<a class="share-twitter" href="https://twitter.com/intent/tweet?text=Overfitting%20vs%20Underfitting&url=/blog/overfitting-vs-underfitting/"
+								<a class="share-twitter" href="https://twitter.com/intent/tweet?text=Generating%20Strings%20Using%20Genetic%20Algorithm&url=/blog/Generating-Strings-Using-Genetic-Algorithm"
 								onclick="window.open(this.href, 'pop-up', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;"
 								title="Share on Twitter" rel="nofollow">
 									<i class="ion ion-logo-twitter"></i>
@@ -263,7 +309,7 @@
 							</li>
 					
 							<li class="share-item">
-								<a class="share-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=/blog/overfitting-vs-underfitting/&title=Overfitting%20vs%20Underfitting&summary=&source=Ashwin%20Vaidya"
+								<a class="share-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=/blog/Generating-Strings-Using-Genetic-Algorithm&title=Generating%20Strings%20Using%20Genetic%20Algorithm&summary=&source=Ashwin%20Vaidya"
 								onclick="window.open(this.href, 'pop-up', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;"
 								title="Share on LinkedIn" rel="nofollow">
 									<i class="ion ion-logo-linkedin"></i>
@@ -271,7 +317,7 @@
 							</li>
 					
 							<li class="share-item">
-								<a class="share-pinterest" href="http://pinterest.com/pin/create/button/?url=/blog/overfitting-vs-underfitting/&amp;media=/img//wp-content/uploads/2019/01/house_prices-overfit-unknown.png&amp;description=Overfitting%20vs%20Underfitting"
+								<a class="share-pinterest" href="http://pinterest.com/pin/create/button/?url=/blog/Generating-Strings-Using-Genetic-Algorithm&amp;media=/img/stringCrossover.png&amp;description=Generating%20Strings%20Using%20Genetic%20Algorithm"
 								onclick="window.open(this.href, 'pop-up', 'left=20,top=20,width=900,height=500,toolbar=1,resizable=0'); return false;"
 								title="Share on Pinterest" rel="nofollow">
 									<i class="ion ion-logo-pinterest"></i>
@@ -283,16 +329,11 @@
 
 				<div class="post-navigation">
 					
-					<a href="/blog/k-nearest-neighbors/" class="prev">
+					<a href="/blog/creating-neural-network-from-scratch-in-python/" class="prev">
 						<div class="post-nav-arrow"><i class="ion ion-ios-arrow-round-back"></i> Previous Article</div>
-						<h2 class="post-nav-title">K Nearest Neighbors</h2>
+						<h2 class="post-nav-title">Creating Neural Network from Scratch in Python</h2>
 					</a>
 					 
-					<a href="/blog/a-very-basic-introduction-to-artificial-neural-network/" class="next">
-						<div class="post-nav-arrow">Next Article <i class="ion ion-ios-arrow-round-forward"></i></div>
-						<h2 class="post-nav-title">A Very Basic Introduction to Artificial Neural Network</h2>
-					</a>
-					
 				</div>
 
 			</div>

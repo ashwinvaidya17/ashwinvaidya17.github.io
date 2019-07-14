@@ -1,6 +1,14 @@
 [
   
     {
+      "title"    : "Generating Strings Using Genetic Algorithm",
+      "category" : "",
+      "tags"     : "python and genetic algorithm",
+      "url"      : "/blog/Generating-Strings-Using-Genetic-Algorithm",
+      "date"     : "2019-07-14 13:58:44 +0530"
+    } ,
+  
+    {
       "title"    : "Creating Neural Network from Scratch in Python",
       "category" : "",
       "tags"     : "artificial neural network, neural network, and python",
