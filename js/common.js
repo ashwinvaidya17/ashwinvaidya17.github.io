@@ -59,19 +59,24 @@ $(function() {
   var ww = window.innerWidth,
     wh = window.innerHeight;
 
-  $(window).ready(function () {
-    $('body').waitForImages({
-      finished: function () {
-        setTimeout(function () {
-          $('.preloader').addClass('hide');
+  // $(window).ready(function () {
+  //   $('body').waitForImages({
+  //     finished: function () {
+  //       setTimeout(function () {
+  //         $('.preloader').addClass('hide');
 
-          setTimeout(function () {
-            reveals();
-          }, 100);
-        }, 500);
-      },
-      waitForAll: true
-    });
+  //         setTimeout(function () {
+  //           reveals();
+  //         }, 100);
+  //       }, 500);
+  //     },
+  //     waitForAll: true
+  //   });
+  // });
+
+  $(window).ready(function () {
+    $('.preloader').addClass('hide');
+      reveals();
   });
 
   function reveals() {
