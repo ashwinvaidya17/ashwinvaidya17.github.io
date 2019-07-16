@@ -106,19 +106,19 @@ $(function() {
   // Instagram Feed
   ======================= */
   // userId and accessToken from Matthew Elsom (https://codepen.io/matthewelsom/pen/zrrrLN) for example, for which he thanks a lot!
-  var instagramFeed = new Instafeed({
-    get: 'user',
-    limit: 6,
-    resolution: 'standard_resolution',
-    userId: '8136708753',
-    accessToken: '8136708753.1677ed0.7166d66b495c4e10a33f444d9a5b38ca',
-    template:
-      '<li class="instagram-item"><a href="{{link}}" aria-label="{{caption}}" target="_blank"><img src="{{image}}" alt="{{caption}}"></a></li>'
-  });
+  // var instagramFeed = new Instafeed({
+  //   get: 'user',
+  //   limit: 6,
+  //   resolution: 'standard_resolution',
+  //   userId: '8136708753',
+  //   accessToken: '8136708753.1677ed0.7166d66b495c4e10a33f444d9a5b38ca',
+  //   template:
+  //     '<li class="instagram-item"><a href="{{link}}" aria-label="{{caption}}" target="_blank"><img src="{{image}}" alt="{{caption}}"></a></li>'
+  // });
 
-  if ($('#instafeed').length) {
-    instagramFeed.run();
-  }
+  // if ($('#instafeed').length) {
+  //   instagramFeed.run();
+  // }
 
 
   /* =======================
