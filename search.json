@@ -1,6 +1,14 @@
 [
   
     {
+      "title"    : "Invisibility Using OpenCV",
+      "category" : "",
+      "tags"     : "python and opencv",
+      "url"      : "/blog/Invisibility-Using-OpenCV",
+      "date"     : "2019-07-22 09:00:00 +0530"
+    } ,
+  
+    {
       "title"    : "Generating Strings Using Genetic Algorithm",
       "category" : "",
       "tags"     : "python and genetic algorithm",
