@@ -6,10 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Creating Neural Network from Scratch in Python</title>
+  <title>Generating faces using Deep Convolutional Generative Adversarial Network (DCGAN)</title>
   <meta name='description' content='Computer Engineer, Space Buff'>
 
-  <link rel="canonical" href="/blog/creating-neural-network-from-scratch-in-python/">
+  <link rel="canonical" href="/blog/Generating-faces-using-DCGAN">
   <link rel="alternate" type="application/rss+xml" title="Ashwin Vaidya" href="/feed.xml">
 
   <!-- Google Font -->
@@ -134,7 +134,7 @@
 	<div class="row">
 		<div class="col col-12">
 			<div class="post-image-box">
-				<div class="post-image" style="background-image: url(/img//wp-content/uploads/2019/05/nn_from_scratch.png)"></div>
+				<div class="post-image" style="background-image: url(/img/faces-dcgan/training.gif)"></div>
 			</div>
 		</div>
 	</div>
@@ -149,15 +149,19 @@
 					
 					<div class="post-tag">
 						
-						<a href="/tags#artificial neural network" class="tag">artificial neural network</a>
-						
-						<a href="/tags#neural network" class="tag">neural network</a>
-						
 						<a href="/tags#python" class="tag">python</a>
+						
+						<a href="/tags#deep learning" class="tag">deep learning</a>
+						
+						<a href="/tags#pytorch" class="tag">pytorch</a>
+						
+						<a href="/tags#gan" class="tag">gan</a>
+						
+						<a href="/tags#dcgan" class="tag">dcgan</a>
 						
 					</div>
 					
-					<h1 class="post-title">Creating Neural Network from Scratch in Python</h1>
+					<h1 class="post-title">Generating faces using Deep Convolutional Generative Adversarial Network (DCGAN)</h1>
 					<div class="post-info">
 						<div class="post-info-author">
 							<div class="info-author-avatar" style="background-image: url(/img/profile.jpg)"></div>
@@ -166,228 +170,185 @@
 						</div>
 						<div class="post-date">
 							<span>
-								<time datetime="2019-05-01T20:56:32+05:30">May 01, 2019</time>
+								<time datetime="2019-07-28T15:00:00+05:30">Jul 28, 2019</time>
 							</span>
 						</div>
 					</div>
 				</div>
 
 				<div class="post-body">
-					<p>In my <a href="https://ashwinvaidya.com/blog/a-very-basic-introduction-to-artificial-neural-network/">previous post</a>, I had introduced neural networks at a very high level. If you haven’t read that post then I suggest reading it first before continuing. It will give you an idea of what we are going to accomplish today.</p>
+					<p>The internet is abundant with videos of algorithm turning horses to zebras or fake Obama giving a talk. Earlier people were obsessed with making their photos imitate some famous artist’s style, now they are obsessed with looking old. All this is possible by a kind of neural network called Generative Adversarial Network or GAN for short. GANs were first proposed by <a href="https://papers.nips.cc/paper/5423-generative-adversarial-nets.pdf">Goodfellow et. al.</a> I had been postponing looking into GANs until recently. I have spent the past few days understanding GAN and in this post, I attempt to explain it.</p>
 
-<p>In this post, I am going to show you how to create your own neural network from scratch in Python using just Numpy.</p>
+<p>Let me just recap neural networks before I go into GANs.
+Consider the neural network to be a function. It gets some input and produces some output.
+<img src="/img/faces-dcgan/fig1.jpg" alt="" /></p>
 
-<p>For this tutorial, we are going to train a network to compute an XOR gate (<script type="math/tex">X_1, X_2</script>). This example is simple enough to show the components required for training.</p>
+<p>Now, I won’t go into the internal workings of a neural network as it is a topic for another <a href="https://ashwinvaidya.com/blog/a-very-basic-introduction-to-artificial-neural-network/">post</a>. The main thing here is that it is called a Universal Function Approximator. That is, it can approximate any function. I’ll just represent neural networks like this from now on.
+<img src="/img/faces-dcgan/fig2.jpg" alt="" /></p>
 
-<table class="wp-block-table">
-  <tr>
-    <td>
-      $$X_1$$
-    </td>
-    
-    <td>
-      $$X_2$$
-    </td>
-    
-    <td>
-      $$X_3$$
-    </td>
-    
-    <td>
-      $$Y$$
-    </td>
-  </tr>
-  
-  <tr>
-    <td>
-    </td>
-    
-    <td>
-      1
-    </td>
-    
-    <td>
-      1
-    </td>
-    
-    <td>
-      1
-    </td>
-  </tr>
-  
-  <tr>
-    <td>
-      1
-    </td>
-    
-    <td>
-    </td>
-    
-    <td>
-      1
-    </td>
-    
-    <td>
-      1
-    </td>
-  </tr>
-  
-  <tr>
-    <td>
-      1
-    </td>
-    
-    <td>
-      1
-    </td>
-    
-    <td>
-      1
-    </td>
-    
-    <td>
-    </td>
-  </tr>
-  
-  <tr>
-    <td>
-    </td>
-    
-    <td>
-    </td>
-    
-    <td>
-      1
-    </td>
-    
-    <td>
-    </td>
-  </tr>
-</table>
+<p>A function transforms values from input space to values in output space.</p>
 
-<p>Here is how the network is going to look:</p>
+<p>Take the example of a simple line.</p>
 
-<p><img src="/img/wp-content/uploads/2019/05/nn_from_scratch_architecture-1024x525.png" alt="" /></p>
+<script type="math/tex; mode=display">y = 10x + 3</script>
 
-<h2 id="data">Data</h2>
+<p>If we have the inputs (x) as 1,2,3,4,5,6,7,8,9,10, they would become 13, 23, 33, 43, 53, 63, 73, 83, 92, 103. As you can see, the function transforms the input from one value to another value.</p>
 
-<p>The first layer is the input layer, the second is the hidden layer and the last layer is the output layer.</p>
+<p><img src="/img/faces-dcgan/line.png" alt="" /></p>
 
-<p>Let’s start coding by initializing the training data.</p>
+<p>Apart from changing one value to another, a function can also change the feature space of these values. Let’s expand on the above equation.</p>
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<script type="math/tex; mode=display">y = x</script>
 
-<span class="k">def</span> <span class="nf">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="mf">1.0</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">))</span>
+<script type="math/tex; mode=display">z = 10x + 3</script>
 
-<span class="k">def</span> <span class="nf">sigmoid_prime</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<p>If we plot this, we get a plane. We have now gone from one-dimensional input to two-dimensional output.</p>
 
-<span class="c1">#Create dataset
-</span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span>
-<span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+<p><img src="/img/faces-dcgan/plane.jpg" alt="" /></p>
+
+<h2 id="generative-network">Generative Network</h2>
+
+<p>For most of the tasks, we have used neural networks as a <strong>discriminative model</strong>. <em>Hey! is this image is of a cat of a dog.</em> This model does not care about how the data was generated. Its task is to just classify the input.
+<img src="/img/faces-dcgan/fig3.jpg" alt="" /></p>
+
+<p>A <strong>generative model</strong>, on the other hand, tries to model how the data was generated. If it is told that the image is of a cat, then it tries to generate the original image based on the label.</p>
+
+<p>If the task is to generate images of faces, the neural network needs to learn the function that maps some input to output as faces. Something like this.
+<img src="/img/faces-dcgan/fig4.jpg" alt="" /></p>
+
+<p>Say, we had an input size of 100 i.e [x1, x2, ……, x3] and output as 128x128 dimension image. The network has to not only learn to transform 100 dimentional input to an image but also has to increase the feature space.
+<img src="/img/faces-dcgan/fig5.jpg" alt="" /></p>
+
+<h2 id="generative-adversarial-network">Generative Adversarial Network</h2>
+
+<p>Now the question becomes how do we train such a model. This is where the adversarial part comes in. GANs consists of two networks, one to produce the image from a given input and the other to see the image and tell whether it is from the real data of generated data. Taking the example given in the paper by <a href="https://papers.nips.cc/paper/5423-generative-adversarial-nets.pdf">Goodfellow et. al.</a>, the generator can be considered as a counterfeiter of fake currency and the discriminator as police trying to detect fake currency. This competition between them improves the fakes generated by the counterfeiter untill the fakes cannot be distinguished from real. 
+<img src="/img/faces-dcgan/fig5.jpg" alt="" />
+<em>Generator</em></p>
+
+<p><img src="/img/faces-dcgan/fig6.jpg" alt="" />
+<em>Discriminator</em></p>
+
+<p>Let D(x) be the probability that the discriminator outputs. Ideally, the discriminator outputs probability 1 for real images and 0 for fake images. Let G(z) be the output images of the generator given initial vector z. We want the discriminator to correctly classify images of both the class. The discriminator should maximize <script type="math/tex">log(D(x))</script> + <script type="math/tex">log(1- D(G(z)))</script>. This means that the discriminator should maximize the probability of predicting correct classes + the probability of identifying fake images. Similarly, the generator has to minimize <script type="math/tex">log(1-(D(G(x)))</script>.  That is, for fake images discriminator produces a value close to 1 (label for real images) leading to a value close to 0.</p>
+
+<h2 id="implementation">Implementation</h2>
+
+<p>Well, that was the meat of the algorithm. We are going to implement a variant of GAN called DCGAN (Deep Convolutional Generative Adversarial Network). This was proposed by <a href="https://arxiv.org/abs/1511.06434">Alec et. al.</a> which uses CNNs instead of fully connected layers as in vanilla GAN.</p>
+
+<p>The entire code is available <a href="https://github.com/ashwinvaidya17/DCGAN-faces/blob/master/GAN_celebrity.ipynb">here</a>. I will be explaining only the important parts of the code below.</p>
+
+<p>Let’s start by creating the discriminator</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Discriminator(nn.Module):
+    def __init__(self):
+    super(Discriminator, self).__init__()
+    self.main = nn.Sequential(
+                nn.Conv2d(nchannels, ndf, 4, stride=2, padding=1, bias=False),
+                nn.LeakyReLU(negative_slope=0.2, inplace=True),
+                
+                nn.Conv2d(ndf, ndf*2, 4, stride=2, padding=1, bias=False),
+                nn.BatchNorm2d(ndf*2),
+                nn.LeakyReLU(negative_slope=0.2, inplace=True),
+                
+                nn.Conv2d(ndf*2, ndf*4, 4, stride=2, padding=1, bias=False),
+                nn.BatchNorm2d(ndf*4),
+                nn.LeakyReLU(negative_slope=0.2, inplace=True),
+                
+                nn.Conv2d(ndf*4, ndf*8, 4, stride=2, padding=1, bias=False),
+                nn.BatchNorm2d(ndf*8),
+                nn.LeakyReLU(negative_slope=0.2, inplace=True),
+                
+                nn.Conv2d(ndf*8, 1, 4, stride=1, padding=0, bias=False),
+                nn.Sigmoid()
+                )
+    
+    def forward(self, input):
+    return self.main(input)
 </code></pre></div></div>
 
-<p>I have also defined the sigmoid function and its derivative function as we will need it later.</p>
+<p>The discriminator is a standard CNN which takes image data as input and produces a single output. One thing to note is that this architecture does not have max-pool layer but uses batch normalization.</p>
 
-<h2 id="creating-the-network">Creating the network</h2>
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># good practice
-</span><span class="n">hidden_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">output_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+<p>Now, we create the generator.</p>
 
-<span class="n">hidden_bias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-<span class="n">output_bias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Generator(nn.Module):
+    def __init__(self):
+    super(Generator, self).__init__()
+    
+    self.main = nn.Sequential(
+                nn.ConvTranspose2d(nz, ngf*8, 4, stride=1, padding=0, bias=False),
+                nn.BatchNorm2d(ngf*8),
+                nn.ReLU(True),
+                nn.ConvTranspose2d(ngf*8, ngf*4, 4, stride=2, padding=1, bias=False),
+                nn.BatchNorm2d(ngf*4),
+                nn.ReLU(True),
+                nn.ConvTranspose2d(ngf*4, ngf*2, 4, stride=2, padding=1, bias=False),
+                nn.BatchNorm2d(ngf*2),
+                nn.ReLU(True),
+                nn.ConvTranspose2d(ngf*2, ngf, 4, stride=2, padding=1, bias=False),
+                nn.BatchNorm2d(ngf),
+                nn.ReLU(True),
+                nn.ConvTranspose2d(ngf,nchannels, 4, stride=2, padding=1, bias=False),
+                nn.Tanh())
+    
+    def forward(self, input):
+    output = self.main(input)
+    return output
 </code></pre></div></div>
 
-<p>Since the first layer is the input layer, we essentially deal with two sets of weights. The first set is from the 3 input units to the 4 hidden units. The second set maps the hidden units to the output unit.</p>
+<p>The generator takes the 100 dimension vector and converts it into an image. To do this it needs to up-sample the input. Up-sampling is done by transposed convolutional layer. A convolutional layer down-samples the image by passing a filter over it. The transposed convolutional layer works oppositely. <a href="https://github.com/vdumoulin/conv_arithmetic/blob/master/README.md">This image</a> shows the transposed convolutional operation. These layers help increase feature space so that we can go from 100 dimentional input to 128x128 RGB images.</p>
 
-<p>I have also included bias for completeness. While this simple example works just fine without biases, including them in the calculation keeps our network consistent with the one shown in the <a href="https://ashwinvaidya.com/blog/a-very-basic-introduction-to-artificial-neural-network/">previous post</a>.</p>
+<p>We initialize the two networks as</p>
 
-<p>The <strong>randn</strong> function assigns weights from a uniform normal distribution. There are cleverer ways to initialize weights but this is good enough for the current example.</p>
-
-<p>Finally, remember to seed the random function. This will initialize the weights similarly in each run. You don’t want the initialization to change between executions. It becomes crucial when optimizing the hyperparameters. Random weights initialization will lead you to believe that the improvement was because of a particular selection of hyperparameter leaving you with a sub-par model.</p>
-
-<h2 id="forward-pass">Forward Pass</h2>
-
-<p>If you remember from the previous post the output of the network is <script type="math/tex">\hat{y} = \sigma(x*w + b)</script>, w represents the weights and x represents the output from the previous layer.</p>
-
-<p>The code for the forward pass is very simple.</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">hidden_activation</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">hidden_weights</span><span class="p">)</span> <span class="o">+</span> <span class="n">hidden_bias</span><span class="p">)</span>
-<span class="n">output_activation</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">hidden_activation</span><span class="p">,</span> <span class="n">output_weights</span><span class="p">)</span> <span class="o">+</span> <span class="n">output_bias</span><span class="p">)</span>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>netG = Generator().to(device)
+netD = Discriminator().to(device)
 </code></pre></div></div>
 
-<h2 id="backward-pass">Backward Pass</h2>
+<p>Now that we have defined the two networks, we can train the model.
+In each epoch for the batch of images we do the following:</p>
 
-<p>This is where things get interesting. Up till now, we have just created a simple neural network which takes in data and makes a prediction. Initially, the network does not predict the right value of Y given the input. To be able to train a network we need a <em>loss function.</em> Loss function tells by how much the network deviates from the actual input.</p>
+<p>We first take the real images and pass them through the discriminator. The real labels and the output of the network is passed to the loss function.</p>
 
-<p>We are going to use the Mean Squared Error Loss function defined as</p>
-
-<script type="math/tex; mode=display">\frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2</script>
-
-<p>Here n is the total number of training examples. <script type="math/tex">\hat{y}_i</script> represents the actual label for the training example.</p>
-
-<p>Our motive is to adjust the weights so that the predicted output is closer to the required output. That is, the loss is reduced. Let’s just focus on a single training example.
-  
-<script type="math/tex">J = (y - \hat{y})^2</script> </p>
-
-<p>This can be written as  </p>
-
-<p><script type="math/tex">J = (\sigma(x*w + b) - y)^2</script> </p>
-
-<p>This is the activation from the last layer. We want to see how much effect does the weights of the last layer have on the loss. Recall that the derivative at a point in a graph represents its slope.</p>
-
-<p><img src="/img/wp-content/uploads/2019/05/slope_at_point-1024x1024.jpg" alt="" /></p>
-
-<p>The above image represents a curve with its derivative at the point in red. The loss function can be considered as the above curve but in multiple dimension (it actually forms a hyperplane). Trying to reduce the loss is similar towards moving in the valley in the above curve. </p>
-
-<p>We can continue calculating the slope (derivative) and taking a step towards the valley. This is essentially what backpropagation does.   Let’s take a partial derivative of the loss function (we are ignoring the bias for now)</p>
-
-<script type="math/tex; mode=display">\frac{\partial J}{\partial w} = 2*(\sigma'(x*w + b)*x)</script>
-
-<p>Further, taking derivative with respect to bias </p>
-
-<script type="math/tex; mode=display">\frac{\partial J}{\partial w} = 2*(\sigma'(x*w + b))</script>
-
-<p>This shows how much effect the weights in the last layer have on the final cost. Similarly, we can write the cost function in terms of weights in the hidden layer. </p>
-
-<script type="math/tex; mode=display">J = (\sigma(\sigma(x*w_1 + b_1)*w_2 + b_2)- y)^2</script>
-
-<p>Taking partial derivative with respect to <script type="math/tex">w_1</script> will give the effect of <script type="math/tex">w_1</script> on the loss function.  To become comfortable with the calculation I suggest calculating the derivative of the above equation on your own. </p>
-
-<p><script type="math/tex">\sigma'</script> is the derivative of <script type="math/tex">(\sigma)</script>. With calculation it can be shown that <script type="math/tex">\sigma'(x) = \sigma*(1-\sigma(x))</script>. This is what we have used in the function above.</p>
-
-<p>After iterating over the entire training data and accumulating the change in weights, the neural network is updated as follows.</p>
-
-<script type="math/tex; mode=display">w = w - \frac{1}{n}\sum_{i=1}^n \frac{\partial J}{\partial w}</script>
-
-<script type="math/tex; mode=display">b = b - \frac{1}{n}\sum_{i=1}^n \frac{\partial J}{\partial b}</script>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">delta_output_weights</span> <span class="o">=</span> <span class="p">(</span><span class="n">output_activation</span> <span class="o">-</span> <span class="n">Y</span><span class="p">)</span> <span class="o">*</span> <span class="n">sigmoid_prime</span><span class="p">(</span><span class="n">output_activation</span><span class="p">)</span>
-<span class="n">delta_hidden_weights</span> <span class="o">=</span> <span class="n">delta_output_weights</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">output_weights</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">*</span> <span class="n">sigmoid_prime</span><span class="p">(</span><span class="n">hidden_activation</span><span class="p">)</span>
-<span class="n">output_weights</span> <span class="o">-=</span> <span class="n">hidden_activation</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">delta_output_weights</span><span class="p">)</span>
-<span class="n">hidden_weights</span> <span class="o">-=</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">delta_hidden_weights</span><span class="p">)</span>
-<span class="n">output_bias</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">delta_output_weights</span><span class="p">)</span>
-<span class="n">hidden_bias</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">delta_hidden_weights</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">netD</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+<span class="n">real</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+<span class="n">b_size</span> <span class="o">=</span> <span class="n">real</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">label</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">b_size</span><span class="p">,),</span> <span class="n">real_label</span><span class="p">,</span><span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">netD</span><span class="p">(</span><span class="n">real</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">errD_real</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+<span class="n">errD_real</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
 </code></pre></div></div>
 
-<h2 id="putting-it-all-together">Putting It All Together</h2>
+<p>We then generate some random noise and pass it through the generator to get the fake images. These images with their label are passed to the loss function.</p>
 
-<p>Finally, the entire code looks like this</p>
-
-<script src="https://gist.github.com/ashwinvaidya17/129ab38411961cbb646eaf3fcc18c59c.js"></script>
-
-<p>And you can see the result below</p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Loss:  0.5013730688788007
-Loss:  0.4664830127093482
-Loss:  0.24207358013744795
-Loss:  0.09891100378926312
-Loss:  0.087323152676015
-Loss:  0.06892222408037366
-Loss:  0.05528837086156295
-Loss:  0.027425185939300573
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">noise</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">b_size</span><span class="p">,</span> <span class="n">nz</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">)</span>
+<span class="n">fake</span> <span class="o">=</span> <span class="n">netG</span><span class="p">(</span><span class="n">noise</span><span class="p">)</span>
+<span class="n">label</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="n">fake_label</span><span class="p">)</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">netD</span><span class="p">(</span><span class="n">fake</span><span class="o">.</span><span class="n">detach</span><span class="p">())</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">errD_fake</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+<span class="n">errD_fake</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
 </code></pre></div></div>
+
+<p>Finally, we do a single gradient step on the discriminator.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">errD</span> <span class="o">=</span> <span class="n">errD_real</span> <span class="o">+</span> <span class="n">errD_fake</span>
+<span class="n">optimizerD</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>Next, we train the generator. Labels are gathered by passing the fake images through the discriminator. The target labels are set to 1 this time as we want the generator to learn to create realistic images. The error for the generator is calculated using the labels provided by the discriminator and the target label (1 for each image).</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">netG</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+<span class="n">label</span><span class="o">.</span><span class="n">fill_</span><span class="p">(</span><span class="n">real_label</span><span class="p">)</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">netD</span><span class="p">(</span><span class="n">fake</span><span class="p">)</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">errG</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+<span class="n">errG</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+<span class="n">optimizerG</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>That is it. These two networks finally reach a point where neither improves each other. This is the saddle point.</p>
+
+<p>Finally, you get the results like these.
+<img src="/img/faces-dcgan/real_fake.jpg" alt="" />
+<img src="/img/faces-dcgan/training.gif" alt="" /></p>
+
+<p>You can grab the entire code <a href="https://github.com/ashwinvaidya17/DCGAN-faces/blob/master/GAN_celebrity.ipynb">here</a>.</p>
 
 <p>Thanks for reading 😎</p>
 
@@ -395,7 +356,7 @@ Loss:  0.027425185939300573
 					<div class="post-share">
 						<ul class="share-list list-reset">
 							<li class="share-item">
-								<a class="share-facebook" href="https://www.facebook.com/sharer/sharer.php?u=/blog/creating-neural-network-from-scratch-in-python/"
+								<a class="share-facebook" href="https://www.facebook.com/sharer/sharer.php?u=/blog/Generating-faces-using-DCGAN"
 								onclick="window.open(this.href, 'pop-up', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;"
 								title="Share on Facebook" rel="nofollow">
 									<i class="ion ion-logo-facebook"></i>
@@ -403,7 +364,7 @@ Loss:  0.027425185939300573
 							</li>
 					
 							<li class="share-item">
-								<a class="share-twitter" href="https://twitter.com/intent/tweet?text=Creating%20Neural%20Network%20from%20Scratch%20in%20Python&url=/blog/creating-neural-network-from-scratch-in-python/"
+								<a class="share-twitter" href="https://twitter.com/intent/tweet?text=Generating%20faces%20using%20Deep%20Convolutional%20Generative%20Adversarial%20Network%20(DCGAN)&url=/blog/Generating-faces-using-DCGAN"
 								onclick="window.open(this.href, 'pop-up', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;"
 								title="Share on Twitter" rel="nofollow">
 									<i class="ion ion-logo-twitter"></i>
@@ -411,7 +372,7 @@ Loss:  0.027425185939300573
 							</li>
 					
 							<li class="share-item">
-								<a class="share-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=/blog/creating-neural-network-from-scratch-in-python/&title=Creating%20Neural%20Network%20from%20Scratch%20in%20Python&summary=&source=Ashwin%20Vaidya"
+								<a class="share-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=/blog/Generating-faces-using-DCGAN&title=Generating%20faces%20using%20Deep%20Convolutional%20Generative%20Adversarial%20Network%20(DCGAN)&summary=&source=Ashwin%20Vaidya"
 								onclick="window.open(this.href, 'pop-up', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;"
 								title="Share on LinkedIn" rel="nofollow">
 									<i class="ion ion-logo-linkedin"></i>
@@ -419,7 +380,7 @@ Loss:  0.027425185939300573
 							</li>
 					
 							<li class="share-item">
-								<a class="share-pinterest" href="http://pinterest.com/pin/create/button/?url=/blog/creating-neural-network-from-scratch-in-python/&amp;media=/img//wp-content/uploads/2019/05/nn_from_scratch.png&amp;description=Creating%20Neural%20Network%20from%20Scratch%20in%20Python"
+								<a class="share-pinterest" href="http://pinterest.com/pin/create/button/?url=/blog/Generating-faces-using-DCGAN&amp;media=/img/faces-dcgan/training.gif&amp;description=Generating%20faces%20using%20Deep%20Convolutional%20Generative%20Adversarial%20Network%20(DCGAN)"
 								onclick="window.open(this.href, 'pop-up', 'left=20,top=20,width=900,height=500,toolbar=1,resizable=0'); return false;"
 								title="Share on Pinterest" rel="nofollow">
 									<i class="ion ion-logo-pinterest"></i>
@@ -431,16 +392,11 @@ Loss:  0.027425185939300573
 
 				<div class="post-navigation">
 					
-					<a href="/blog/fashion-mnist-loader/" class="prev">
+					<a href="/blog/Invisibility-Using-OpenCV" class="prev">
 						<div class="post-nav-arrow"><i class="ion ion-ios-arrow-round-back"></i> Previous Article</div>
-						<h2 class="post-nav-title">Fashion MNIST Loader</h2>
+						<h2 class="post-nav-title">Invisibility Using OpenCV</h2>
 					</a>
 					 
-					<a href="/blog/Generating-Strings-Using-Genetic-Algorithm" class="next">
-						<div class="post-nav-arrow">Next Article <i class="ion ion-ios-arrow-round-forward"></i></div>
-						<h2 class="post-nav-title">Generating Strings Using Genetic Algorithm</h2>
-					</a>
-					
 				</div>
 
 			</div>
