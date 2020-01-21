@@ -1,0 +1,217 @@
+<p>In my <a href="https://ashwinvaidya.com/blog/a-very-basic-introduction-to-artificial-neural-network/">previous post</a>, I had introduced neural networks at a very high level. If you haven’t read that post then I suggest reading it first before continuing. It will give you an idea of what we are going to accomplish today.</p>
+
+<p>In this post, I am going to show you how to create your own neural network from scratch in Python using just Numpy.</p>
+
+<p>For this tutorial, we are going to train a network to compute an XOR gate (<script type="math/tex">X_1, X_2</script>). This example is simple enough to show the components required for training.</p>
+
+<table class="wp-block-table">
+  <tr>
+    <td>
+      $$X_1$$
+    </td>
+    
+    <td>
+      $$X_2$$
+    </td>
+    
+    <td>
+      $$X_3$$
+    </td>
+    
+    <td>
+      $$Y$$
+    </td>
+  </tr>
+  
+  <tr>
+    <td>
+    </td>
+    
+    <td>
+      1
+    </td>
+    
+    <td>
+      1
+    </td>
+    
+    <td>
+      1
+    </td>
+  </tr>
+  
+  <tr>
+    <td>
+      1
+    </td>
+    
+    <td>
+    </td>
+    
+    <td>
+      1
+    </td>
+    
+    <td>
+      1
+    </td>
+  </tr>
+  
+  <tr>
+    <td>
+      1
+    </td>
+    
+    <td>
+      1
+    </td>
+    
+    <td>
+      1
+    </td>
+    
+    <td>
+    </td>
+  </tr>
+  
+  <tr>
+    <td>
+    </td>
+    
+    <td>
+    </td>
+    
+    <td>
+      1
+    </td>
+    
+    <td>
+    </td>
+  </tr>
+</table>
+
+<p>Here is how the network is going to look:</p>
+
+<p><img src="/img/wp-content/uploads/2019/05/nn_from_scratch_architecture-1024x525.png" alt="" /></p>
+
+<h2 id="data">Data</h2>
+
+<p>The first layer is the input layer, the second is the hidden layer and the last layer is the output layer.</p>
+
+<p>Let’s start coding by initializing the training data.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+
+<span class="k">def</span> <span class="nf">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="mf">1.0</span><span class="o">/</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">x</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">sigmoid_prime</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">sigmoid</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+<span class="c1">#Create dataset
+</span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]])</span>
+<span class="n">Y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+</code></pre></div></div>
+
+<p>I have also defined the sigmoid function and its derivative function as we will need it later.</p>
+
+<h2 id="creating-the-network">Creating the network</h2>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># good practice
+</span><span class="n">hidden_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">output_weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">hidden_bias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="n">output_bias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>Since the first layer is the input layer, we essentially deal with two sets of weights. The first set is from the 3 input units to the 4 hidden units. The second set maps the hidden units to the output unit.</p>
+
+<p>I have also included bias for completeness. While this simple example works just fine without biases, including them in the calculation keeps our network consistent with the one shown in the <a href="https://ashwinvaidya.com/blog/a-very-basic-introduction-to-artificial-neural-network/">previous post</a>.</p>
+
+<p>The <strong>randn</strong> function assigns weights from a uniform normal distribution. There are cleverer ways to initialize weights but this is good enough for the current example.</p>
+
+<p>Finally, remember to seed the random function. This will initialize the weights similarly in each run. You don’t want the initialization to change between executions. It becomes crucial when optimizing the hyperparameters. Random weights initialization will lead you to believe that the improvement was because of a particular selection of hyperparameter leaving you with a sub-par model.</p>
+
+<h2 id="forward-pass">Forward Pass</h2>
+
+<p>If you remember from the previous post the output of the network is <script type="math/tex">\hat{y} = \sigma(x*w + b)</script>, w represents the weights and x represents the output from the previous layer.</p>
+
+<p>The code for the forward pass is very simple.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">hidden_activation</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">hidden_weights</span><span class="p">)</span> <span class="o">+</span> <span class="n">hidden_bias</span><span class="p">)</span>
+<span class="n">output_activation</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">hidden_activation</span><span class="p">,</span> <span class="n">output_weights</span><span class="p">)</span> <span class="o">+</span> <span class="n">output_bias</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="backward-pass">Backward Pass</h2>
+
+<p>This is where things get interesting. Up till now, we have just created a simple neural network which takes in data and makes a prediction. Initially, the network does not predict the right value of Y given the input. To be able to train a network we need a <em>loss function.</em> Loss function tells by how much the network deviates from the actual input.</p>
+
+<p>We are going to use the Mean Squared Error Loss function defined as</p>
+
+<script type="math/tex; mode=display">\frac{1}{n}\sum_{i=1}^{n}(y_i - \hat{y}_i)^2</script>
+
+<p>Here n is the total number of training examples. <script type="math/tex">\hat{y}_i</script> represents the actual label for the training example.</p>
+
+<p>Our motive is to adjust the weights so that the predicted output is closer to the required output. That is, the loss is reduced. Let’s just focus on a single training example.
+  
+<script type="math/tex">J = (y - \hat{y})^2</script> </p>
+
+<p>This can be written as  </p>
+
+<p><script type="math/tex">J = (\sigma(x*w + b) - y)^2</script> </p>
+
+<p>This is the activation from the last layer. We want to see how much effect does the weights of the last layer have on the loss. Recall that the derivative at a point in a graph represents its slope.</p>
+
+<p><img src="/img/wp-content/uploads/2019/05/slope_at_point-1024x1024.jpg" alt="" /></p>
+
+<p>The above image represents a curve with its derivative at the point in red. The loss function can be considered as the above curve but in multiple dimension (it actually forms a hyperplane). Trying to reduce the loss is similar towards moving in the valley in the above curve. </p>
+
+<p>We can continue calculating the slope (derivative) and taking a step towards the valley. This is essentially what backpropagation does.   Let’s take a partial derivative of the loss function (we are ignoring the bias for now)</p>
+
+<script type="math/tex; mode=display">\frac{\partial J}{\partial w} = 2*(\sigma'(x*w + b)*x)</script>
+
+<p>Further, taking derivative with respect to bias </p>
+
+<script type="math/tex; mode=display">\frac{\partial J}{\partial w} = 2*(\sigma'(x*w + b))</script>
+
+<p>This shows how much effect the weights in the last layer have on the final cost. Similarly, we can write the cost function in terms of weights in the hidden layer. </p>
+
+<script type="math/tex; mode=display">J = (\sigma(\sigma(x*w_1 + b_1)*w_2 + b_2)- y)^2</script>
+
+<p>Taking partial derivative with respect to <script type="math/tex">w_1</script> will give the effect of <script type="math/tex">w_1</script> on the loss function.  To become comfortable with the calculation I suggest calculating the derivative of the above equation on your own. </p>
+
+<p><script type="math/tex">\sigma'</script> is the derivative of <script type="math/tex">(\sigma)</script>. With calculation it can be shown that <script type="math/tex">\sigma'(x) = \sigma*(1-\sigma(x))</script>. This is what we have used in the function above.</p>
+
+<p>After iterating over the entire training data and accumulating the change in weights, the neural network is updated as follows.</p>
+
+<script type="math/tex; mode=display">w = w - \frac{1}{n}\sum_{i=1}^n \frac{\partial J}{\partial w}</script>
+
+<script type="math/tex; mode=display">b = b - \frac{1}{n}\sum_{i=1}^n \frac{\partial J}{\partial b}</script>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">delta_output_weights</span> <span class="o">=</span> <span class="p">(</span><span class="n">output_activation</span> <span class="o">-</span> <span class="n">Y</span><span class="p">)</span> <span class="o">*</span> <span class="n">sigmoid_prime</span><span class="p">(</span><span class="n">output_activation</span><span class="p">)</span>
+<span class="n">delta_hidden_weights</span> <span class="o">=</span> <span class="n">delta_output_weights</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">output_weights</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">*</span> <span class="n">sigmoid_prime</span><span class="p">(</span><span class="n">hidden_activation</span><span class="p">)</span>
+<span class="n">output_weights</span> <span class="o">-=</span> <span class="n">hidden_activation</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">delta_output_weights</span><span class="p">)</span>
+<span class="n">hidden_weights</span> <span class="o">-=</span> <span class="n">X</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">delta_hidden_weights</span><span class="p">)</span>
+<span class="n">output_bias</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">delta_output_weights</span><span class="p">)</span>
+<span class="n">hidden_bias</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">delta_hidden_weights</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="putting-it-all-together">Putting It All Together</h2>
+
+<p>Finally, the entire code looks like this</p>
+
+<script src="https://gist.github.com/ashwinvaidya17/129ab38411961cbb646eaf3fcc18c59c.js"></script>
+
+<p>And you can see the result below</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Loss:  0.5013730688788007
+Loss:  0.4664830127093482
+Loss:  0.24207358013744795
+Loss:  0.09891100378926312
+Loss:  0.087323152676015
+Loss:  0.06892222408037366
+Loss:  0.05528837086156295
+Loss:  0.027425185939300573
+</code></pre></div></div>
+
+<p>Thanks for reading 😎</p>
