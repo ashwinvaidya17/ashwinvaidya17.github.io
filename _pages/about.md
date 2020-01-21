@@ -23,7 +23,7 @@ permalink: /about/
 </h2>
 
 <p style="text-align:left">
-  Hey! I am a Machine Learning Intern at AI Adventures.<br>
+  Hey! I am a student of MSc. Artificial Intelligence at the University of Groningen.<br>
   I love Space, Physics and Technology. I am an aspiring machine learning engineer. One day I plan to go to Mars!<br>
   I did my undergraduate in Computer Engineering at Maharashtra Institute of Technology.<br> 
 </p>

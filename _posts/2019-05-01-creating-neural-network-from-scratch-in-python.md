@@ -41,8 +41,9 @@ For this tutorial, we are going to train a network to compute an XOR gate ($$X_1
   
   <tr>
     <td>
+    0
     </td>
-    
+
     <td>
       1
     </td>
@@ -62,6 +63,7 @@ For this tutorial, we are going to train a network to compute an XOR gate ($$X_1
     </td>
     
     <td>
+      0
     </td>
     
     <td>
@@ -87,14 +89,17 @@ For this tutorial, we are going to train a network to compute an XOR gate ($$X_1
     </td>
     
     <td>
+      0
     </td>
   </tr>
   
   <tr>
     <td>
+      0
     </td>
     
     <td>
+      0
     </td>
     
     <td>
@@ -102,6 +107,7 @@ For this tutorial, we are going to train a network to compute an XOR gate ($$X_1
     </td>
     
     <td>
+      0
     </td>
   </tr>
 </table>
@@ -191,7 +197,7 @@ $$\frac{\partial J}{\partial w} = 2*(\sigma'(x*w + b)*x)$$
 
 Further, taking derivative with respect to bias  
 
-$$\frac{\partial J}{\partial w} = 2*(\sigma'(x*w + b))$$
+$$\frac{\partial J}{\partial b} = 2*(\sigma'(x*w + b))$$
 
 This shows how much effect the weights in the last layer have on the final cost. Similarly, we can write the cost function in terms of weights in the hidden layer.  
 
