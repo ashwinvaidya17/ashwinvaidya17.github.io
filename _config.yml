@@ -15,7 +15,7 @@ author-avatar: profile.jpg
 
 #-------------------------------
 # Contact links
-facebook:  https://www.facebook.com/AshwinVaidya17 # Add your Facebook handle
+# facebook:  # Add your Facebook handle
 twitter:   https://twitter.com/ashwinvaidya17 # Add your Facebook handle
 instagram: https://www.instagram.com/ashwin.vaidya17/ # Add your Facebook handle
 #pinterest: https://www.pinterest.com/ # Add your Facebook handle
@@ -33,13 +33,12 @@ instafeed: false # To enable the instafeed, use the value true. To turn off use 
 
 #-------------------------------
 # Google Analytics
-google-analytics: UA-123420588-1 # Add your identifier. For example UA-99631805-1.
+google-analytics: # Add your identifier. For example UA-99631805-1.
 
 
 #-------------------------------
 # Newsletter
-mailchimp: gmail.us3.list-manage.com/subscribe/post?u=c1d71f35fbc0c60c983f69650&amp;id=fae750ed8c # Add your MailChimp form identifier. For example - blogenjoyfreedom.us16.list-manage.com/subscribe/post?u=cd56155d76ddeeb4c0bc4d080&amp;id=7a526cd13e
-
+mailchimp:
 
 #-------------------------------
 # Build settings
