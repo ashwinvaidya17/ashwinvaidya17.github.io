@@ -1,0 +1,105 @@
+<!DOCTYPE html><html lang='en'><head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ashwin Vaidya</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;1,300&family=Noto+Sans:wght@200&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/apprentice.min.css"
+  />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script
+    id="MathJax-script"
+    async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+  ></script>
+
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+<body><header><a href="index.html" class="siteHeader">Ashwin Vaidya</a>
+<a class="aboutHeader" href="about.html">About</a>
+</header><main><div class='metadata'><span class='extra-info'>Originally published on 1st September 2018</span>|<span class='last-updated'>Last Updated: December 2023</span></div><h1 class='title'>Decision Trees</h1><div class='toc'><h2>Table of Contents</h2><ul>
+<li><a href="#decision-trees">Decision Trees</a></li>
+<ul>
+<li><a href="#what-are-decision-trees">What are Decision Trees?</a></li>
+<li><a href="#how-to-make-one">How to make one?</a></li>
+<li><a href="#show-me-the-code">Show me the code</a></li>
+</ul>
+</ul>
+</div><h1 id="decision-trees">Decision Trees</h1>
+<p><strong><em>Disclaimer:</em></strong> <em>In the post, I have used NASA astronaut recruitment procedure for the example. I don't have any experience in it and do not work for NASA. ( At least not yet 🙂 ). The example is based on the information available here:</em> <a href="https://www.nasa.gov/audience/forstudents/postsecondary/features/F_Astronaut_Requirements.html">https://www.nasa.gov/audience/forstudents/postsecondary/features/F_Astronaut_Requirements.html</a>, <a href="https://www.space.com/25786-how-to-become-an-astronaut.html">https://www.space.com/25786-how-to-become-an-astronaut.html</a></p>
+<h2 id="what-are-decision-trees">What are Decision Trees?</h2>
+<p>Suppose you work for NASA and have to select the next batch of astronauts. You receive 20,000 applications from aspiring candidates. However, before you manually go through each, you need to keep only those that meet the criteria. The agency has strict requirements on experience, height and education.</p>
+<p>Now, suppose that the following are the first 10 applications you receive:</p>
+<p><img src="imgs/decision-trees/Untitled-9f81c606-71ff-4416-9479-fcd2832ce442.png" alt="" /></p>
+<p>Based on this you can clearly take decisions whether to consider the application for further review. Here clearly, the non-US citizens do not qualify. Further, applicants with less than 3 years of experience also do not meet the agency requirements.</p>
+<p>This is where decision trees can come in handy. A decision tree for the above data can be as follows. Further, this is just one variant of a decision tree that can be formed.</p>
+<p><img src="imgs/decision-trees/Untitled-5ca65293-008c-44ed-a2f3-975dd81efd8b.png" alt="" /></p>
+<p>As you can see, decision trees visually and explicitly represent decisions. Here, the internal nodes represent conditions on which the branch splits and the leaf node represents the decision.</p>
+<p>Now, this was just an example. In reality, you can expect a more complicated tree with more decision nodes. However, the principle is the same.</p>
+<p><strong>Decision Trees in Machine Learning.</strong> There are two types of predictions which a machine learning model makes; Classification and Regression.</p>
+<p><strong>Classification</strong> deals with assigning classes. That is, in the above example, to tell whether to consider or reject the candidate's application.</p>
+<p><strong>Regression</strong> deals with continuous values. Suppose you are given the speed of a car and you want to predict the distance it travels after the brake is applied.</p>
+<p>Decision trees can be used for both the tasks and thus, leads to two categories of trees; Classification tree and Regression tree.</p>
+<h2 id="how-to-make-one">How to make one?</h2>
+<p>Now that you have an idea of what a decision tree is, the next question that comes is, <em>how do you build one?</em></p>
+<p>Consider the data is represented in a 2D space:</p>
+<p><img src="imgs/decision-trees/Untitled-fb87fd44-64ba-438e-b3d5-2dc82a5b6dea.png" alt="" /></p>
+<p>Here, we would like to split the space into regions so as to correctly classify the data points.</p>
+<p>This can be done as follows:</p>
+<p><img src="imgs/decision-trees/Untitled-df796c21-0422-415d-9b60-550bb92e507b.png" alt="" /></p>
+<p>The blue lines represent the threshold of the split in x<sub>1</sub> and x<sub>2</sub>.</p>
+<p>In order to achieve this split automatically, we need to calculate the cost of each split. The split with the lowest cost is chosen. The aim of this is to find the most homogeneous branch. Which means that a group having the most similar features. The splitting is applied in recursion until some stopping criterion is met. This criterion can be either, the minimum number of training points on the leaf of the tree or limitation on the depth of the tree. This ensures that the tree does not overfit.</p>
+<h2 id="show-me-the-code">Show me the code</h2>
+<p>Following is the code for making a decision tree using Scikit-Learn in python.</p>
+<pre><code class="language-python">from sklearn.tree import DecisionTreeClassifier
+from sklearn import preprocessing
+
+import numpy as np
+
+le = preprocessing.LabelEncoder()
+clf = DecisionTreeClassifier()
+
+training = np.array([
+    [3, &quot;yes&quot;, 62, &quot;accept&quot;],
+    [4, &quot;yes&quot;, 70, &quot;accept&quot;],
+    [2, &quot;yes&quot;, 71, &quot;reject&quot;],
+    [5, &quot;yes&quot;, 58, &quot;reject&quot;],
+    [1, &quot;no&quot;, 76, &quot;reject&quot;],
+    [6, &quot;no&quot;, 64, &quot;reject&quot;],
+    [2, &quot;yes&quot;, 74, &quot;reject&quot;],
+    [3, &quot;yes&quot;, 75, &quot;accept&quot;],
+    [4, &quot;yes&quot;, 67, &quot;accept&quot;],
+    [2, &quot;no&quot;, 73, &quot;reject&quot;],
+])
+
+training[:,1] = le.fit_transform(training[:,1])
+
+
+X = training[:,:-1]
+y = training[:,-1]
+
+clf.fit(X,y)
+
+# test data
+test = np.array([
+    [3, &quot;yes&quot;, 63],
+    [1, &quot;no&quot;, 59],
+    ])
+test[:,1] = le.transform(test[:,1])
+
+print(clf.predict(test))
+</code></pre>
+<p>Predicted output:</p>
+<p>['accept' 'reject']</p>
+<p>You can grab the code <a href="https://github.com/ashwinvaidya17/DecisionTree-ScikitLearn">here</a>.</p>
+</main><footer>© <a href="index.html">Ashwin Vaidya</a></footer></body></html>

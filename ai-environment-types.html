@@ -1,0 +1,55 @@
+<!DOCTYPE html><html lang='en'><head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ashwin Vaidya</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;1,300&family=Noto+Sans:wght@200&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/apprentice.min.css"
+  />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script
+    id="MathJax-script"
+    async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+  ></script>
+
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+<body><header><a href="index.html" class="siteHeader">Ashwin Vaidya</a>
+<a class="aboutHeader" href="about.html">About</a>
+</header><main><div class='metadata'><span class='extra-info'>Originally published on 12th September 2018</span>|<span class='last-updated'>Last Updated: December 2023</span></div><h1 class='title'>AI Environment Types</h1><div class='toc'><h2>Table of Contents</h2><ul>
+<li><a href="#1-fully-observable-vs-partially-observable">1. Fully Observable vs. Partially Observable</a></li>
+<li><a href="#2-deterministic-vs-stochastic">2. Deterministic vs. Stochastic</a></li>
+<li><a href="#3-competitive-vs-collaborative">3. Competitive vs. Collaborative</a></li>
+<li><a href="#4-static-vs-dynamic">4. Static vs. Dynamic</a></li>
+<li><a href="#5-episodic-vs-sequential">5. Episodic vs. Sequential</a></li>
+</ul>
+</div><img src="imgs/ai-env-types/rawpixel-558598-unsplash.jpg" sizes="(max-width: 6628px) 100vw, 6628px" />
+<p style="text-align:center">
+  Photo by rawpixel on Unsplash
+</p>
+<p>An AI agent operates in an <em>environment</em>. For example, for a self-driving car, the environment is the road and for a chess-playing agent, the environment is the chessboard. Further, an environment might also have other agents operating on it. Like other autonomous vehicles in the example of the self-driving car. The nature of <em>environment</em> also varies based on the problem that the AI agent is intended to solve.</p>
+<p>The <a href="what-is-artificial-intelligence.html">previous</a> blog post covered the definition of an artificial intelligence agent. In this post, I am going to explain in brief the classification of <em>environments</em>.</p>
+<h2 id="1-fully-observable-vs-partially-observable">1. Fully Observable vs. Partially Observable</h2>
+<p>Consider the example of Chess where each player has access to the complete board information. Every decision is made considering the state of the board at that time and the possible moves by the other player. This is a 'fully observable' environment. Contrast this with Poker where players cannot anticipate the opponent's game as they do not have access to the opponent's cards. Such an environment is 'Partially Observable'.</p>
+<p>The environment of an autonomous vehicle is Partially Observable since the car cannot predict what the other cars might do.</p>
+<h2 id="2-deterministic-vs-stochastic">2. Deterministic vs. Stochastic</h2>
+<p>In a Deterministic environment, the outcome is certain and can be determined based on a specific state. However, in a Stochastic environment, the next state cannot be predicted with certainty. Chess can be considered as having a Deterministic environment. The autonomous vehicle, however, has a Stochastic environment. Here, the decision taken by the autonomous vehicle is based on the probability of action of other vehicles.</p>
+<h2 id="3-competitive-vs-collaborative">3. Competitive vs. Collaborative</h2>
+<p>In Competitive environments, AI agents face other AI agents. Two AI agents playing chess against each other is an example of a Competitive environment. In Collaborative environments, AI agents work with each other to achieve a specific objective. Self-driving vehicles can be said to operate in a Collaborative environment as they coordinate their actions to avoid collisions.</p>
+<h2 id="4-static-vs-dynamic">4. Static vs. Dynamic</h2>
+<p>A Dynamic environment might change while the agent is processing a response. However, in a Static environment, the environment does not change during the course of decision making. An autonomous car has to deal with a Dynamic environment whereas, in Chess, the environment remains unchanged (Static) during the period a player is a contemplation the next move.</p>
+<h2 id="5-episodic-vs-sequential">5. Episodic vs. Sequential</h2>
+<p>In a Sequential environment, the agent has to take decisions considering its previous decisions. However, in an Episodic environment, the agent has to consider only the current state of the environment.</p>
+<p><strong>You have reached the end 😎</strong></p>
+</main><footer>© <a href="index.html">Ashwin Vaidya</a></footer></body></html>

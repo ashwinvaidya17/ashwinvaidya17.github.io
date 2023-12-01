@@ -1,76 +1,30 @@
----
-layout: default
----
-<div class="container">
-	<div class="row">
-	{% if site.posts.size > 0 %}
-		{%- for post in paginator.posts -%}
-		{% if forloop.index <= 1 %}
-		<div class="col col-12">
-			<article class="article-first">
-				<div class="article-image-first" style="background-image: url({{"/img/" | prepend: site.baseurl | append : post.image}})">
-					<div class="article-content-first">
-						<div class="article-tag">
-						{% if post.tags.size >= 1 %}
-							{% for tag in post.tags %}
-							<a href="{{ site.baseurl }}/tags#{{tag}}" class="tag">{{ tag }}</a>
-							{% endfor %}
-						{% else %} {% endif %}
-						</div>
-						<h2 class="article-title"><a href="{{ post.url | prepend: site.baseurl }}">{{post.title}}</a></h2>
-						<p class="article-excerpt">{% if post.description %}{{ post.description | strip_html | truncate: 163 }}{% else %}{{ post.content | strip_html | truncate: 163 }}{% endif %}</p>
-						<a href="{{ post.url | prepend: site.baseurl }}" class="button read-more">Read More</a>
-					</div>
-				</div>
-			</article> <!-- /.article-first -->
-		</div>
-		{% endif %}
+<!DOCTYPE html><html lang='en'><head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ashwin Vaidya</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;1,300&family=Noto+Sans:wght@200&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/apprentice.min.css"
+  />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script
+    id="MathJax-script"
+    async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+  ></script>
 
-		{% endfor %}
-	{% endif %}
-	</div>
-</div>
-
-<div class="container">
-	<div class="row">
-		<div class="col col-12 col-t-8">
-			<div class="row">
-			{%- for post in paginator.posts offset: 1 -%}
-				<article class="article col col-12 col-t-6">
-					<div class="article-box">
-						<div class="article-head">
-							<a href="{{ post.url | prepend: site.baseurl }}" class="article-image" style="background-image: url({{"/img/" | prepend: site.baseurl | append : post.image}})">
-								<div class="image-overlay">
-									<span class="image-overlay-text">{{post.title | slice: 0}}</span>
-								</div>
-							</a>
-						</div>
-						<div class="article-content">
-							<div class="article-info">
-								<div class="article-date">
-									<span class="date"><time datetime="{{ post.date | date_to_xmlschema }}">{% assign date_format = site.minima.date_format | default: "%b %-d, %Y" %}{{ post.date | date: date_format }}</time></span>
-								</div>
-								<div class="article-tag">
-								{% if post.tags.size >= 1 %}
-									{% for tag in post.tags %}
-									<a href="{{ site.baseurl }}/tags#{{tag}}" class="tag">{{ tag }}</a>
-									{% endfor %}
-								{% else %} {% endif %}
-								</div>
-							</div>
-							<h2 class="article-title">
-								<a href="{{ post.url | prepend: site.baseurl }}">{{post.title}}</a>
-							</h2>
-							<p class="article-excerpt">{% if post.description %}{{ post.description | strip_html | truncate: 135 }}{% else %}{{ post.content | strip_html | truncate: 135 }}{% endif %}</p>
-						</div>
-					</div>
-				</article> <!-- /.article -->
-			{% endfor %}
-			</div>
-			{% include pagination.html %}
-		</div>
-		<div class="col col-12 col-t-4">
-			{% include sidebar.html %}
-		</div>
-	</div>
-</div>
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+<body><header><a href="index.html" class="siteHeader">Ashwin Vaidya</a>
+<a class="aboutHeader" href="about.html">About</a>
+</header><main><h1>Posts</h1><ul><li><a href='a-very-basic-introduction-to-artificial-neural-network.html'>A Very Basic Introduction to Artificial Neural Network</a></li><li><a href='self-driving-car-using-genetic-algorithm-in-unity.html'>Self Driving Car using Genetic Algorithm in Unity Engine</a></li><li><a href='what-is-machine-learning.html'>What is Machine Learning?</a></li><li><a href='tech-in-fitness-trackers.html'>Tech In Fitness Trackers</a></li><li><a href='creating-neural-network-from-scratch-in-python.html'>Creating Neural Network from Scratch in Python</a></li><li><a href='elonmusk-vs-neildegrassetyson-classifier.html'>Elon Musk vs Neil Degrasse Tyson Image Classifier Using Tensorflow</a></li><li><a href='k-means-clustering.html'>K-Means Clustering</a></li><li><a href='linear-regression.html'>Linear Regression</a></li><li><a href='fashion-mnist-loader.html'>Fashion MNIST Loader</a></li><li><a href='decision-tree.html'>Decision Trees</a></li><li><a href='brain-machine-interfaces.html'>Brain Machine Interfaces</a></li><li><a href='Generating-Strings-Using-Genetic-Algorithm.html'>Generating Strings Using Genetic Algorithm</a></li><li><a href='ai-environment-types.html'>AI Environment Types</a></li><li><a href='k-nearest-neighbors.html'>K Nearest Neighbors</a></li><li><a href='q-learning.html'>Q Learning</a></li><li><a href='Generating-faces-using-Deep-Convolutional-Generative-Adversarial-Network.html'>Generating faces using Deep Convolutional Generative Adversarial Network (DCGAN)</a></li><li><a href='Invisibility-Using-OpenCV.html'>Invisibility Using OpenCV</a></li><li><a href='what-is-artificial-intelligence.html'>What is Artificial Intelligence</a></li><li><a href='Making-a-Telegram-Bot-for-My-Results.html'>Making a Telegram Bot for My Results</a></li><li><a href='AutoEmailer.html'>AutoEmailer</a></li><li><a href='ai-that-writes-its-own-ai.html'>A.I That Writes Its Own A.I</a></li><li><a href='overfitting-vs-underfitting.html'>Overfitting vs Underfitting</a></li></ul></main><footer>© <a href="index.html">Ashwin Vaidya</a></footer></body></html>

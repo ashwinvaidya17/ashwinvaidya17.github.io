@@ -1,0 +1,118 @@
+<!DOCTYPE html><html lang='en'><head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ashwin Vaidya</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;1,300&family=Noto+Sans:wght@200&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/apprentice.min.css"
+  />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script
+    id="MathJax-script"
+    async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+  ></script>
+
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+<body><header><a href="index.html" class="siteHeader">Ashwin Vaidya</a>
+<a class="aboutHeader" href="about.html">About</a>
+</header><main><div class='metadata'><span class='extra-info'>Originally published on 22nd July 2019</span>|<span class='last-updated'>Last Updated: December 2023</span></div><h1 class='title'>Invisibility Using OpenCV</h1><div class='toc'><h2>Table of Contents</h2><ul>
+<li><a href="#implementation">Implementation</a></li>
+<ul>
+<li><a href="#masking">Masking</a></li>
+<li><a href="#invisibility">Invisibility</a></li>
+</ul>
+</ul>
+</div><p>OpenCV is the go-to library for all your image processing needs. I used it to create my invisibility project.</p>
+<p><img src="imgs/invisibility-using-open-cv/invisibility.gif" alt="" /></p>
+<p>An object is invisible if you can see through it. The problem then becomes how do you show the background instead of the foreground object. A simple idea is to take a photo of the background first and then replace the area the foreground object covers with the corresponding background region. This is the entire algorithm.</p>
+<p>We first take a photo of the background. This now serves our replacement image. In this implementation, we will replace a particular colour with the background. This is similar to the green screen in a movie.</p>
+<p><img src="imgs/invisibility-using-open-cv/green_screen.jpg" alt="" /></p>
+<p><em><strong>The green region in the frame is replaced with some computer-generated background.</strong><br> By Iman Crosson - Iman Crosson's Alphacat channel, YouTube videos, &quot;President Obama on Death of Osama bin Laden (SPOOF)&quot; and &quot;President Obama on Death of Osama SPOOF- BEHIND THE SCENES&quot;, CC BY-SA 3.0, <a href="https://commons.wikimedia.org/w/index.php?curid=15297741">Source</a></em></p>
+<p>In this project, I have used a blue colour cloth to do the same. Now, when I walk into the frame holding the cloth, the program will replace the pixels of the cloth with pixels from the initial background image. Although any colour can be chosen, it should be noted that anything else you wear should not be of the same colour. <em>One of my friends chose to mask the colour red. He ended up vanishing parts of his face. I'll let you guess which ones</em>.</p>
+<h1 id="implementation">Implementation</h1>
+<h2 id="masking">Masking</h2>
+<p>Before we start implementing, I'll explain a bit about masking. Masking is a way to select a region of the frame. It just shows the parts of the frame which are important.</p>
+<p>First, we need to convert the colour of the frame from BGR (Blue Green Red, which is the default way OpenCV reads image instead of traditional RGB) to HSV (Hue Saturation Value).</p>
+<pre><code class="language-python">hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+</code></pre>
+<p>This conversion makes it easier to represent the colour range to select.</p>
+<pre><code class="language-python">low_thresh = np.array([90,90,2])
+high_thresh = np.array([180, 255, 255])
+</code></pre>
+<p>These particular values are based on trial and error such that it represents the required range of blue colour. We then create a mask based on this threshold and the frame.</p>
+<pre><code class="language-python">mask = cv2.inRange(hsv, low_thresh, high_thresh)
+</code></pre>
+<p><img src="imgs/invisibility-using-open-cv/mask.png" alt="" /></p>
+<p>The white region represents RGB values of 255,255,255 and the black region represents RGB values of 0,0,0.</p>
+<p>Then, to show only the blue region, we use the bitwise_and function.</p>
+<pre><code class="language-python">filtered = cv2.bitwise_and(img1, img2, mask=mask)
+</code></pre>
+<p>What it essentially does is a pixel-wise and operation on the image1 and image2. We pass in the mask to select the region where we want the and operation to take place. The dark region in the mask remains the same. If we pass image1 and image2, we will get a blend of colours resulting from the anding of pixels of each image. For example, if the pixel of image 1 is 100 and the pixel of image 2 is 255 and the mask is 255, we will get a resulting pixel of 100. However, if the values of the pixels were the same and the mask was 0 then the resulting pixel would be 0.</p>
+<p>In our case, we want to select just the region of our frame with blue colour. Since the bitwise_and function requires two parameters for the images and the anding between the same image is the same image, we pass both the image 1 and image 2 parameters as our frame. This gives us the masked region of our current frame.</p>
+<p><img src="imgs/invisibility-using-open-cv/filtered.jpg" alt="" /></p>
+<p>You can read the whole code below.</p>
+<pre><code class="language-python">_, frame = cap.read()
+hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+low_thresh = np.array([90,90,2])
+high_thresh = np.array([180, 255, 255])
+
+mask = cv2.inRange(hsv, low_thresh, high_thresh)
+filtered = cv2.bitwise_and(frame, frame, mask=mask)
+
+cv2.imshow(&quot;mask&quot;, mask)
+cv2.imshow(&quot;filtered&quot;, filtered)
+cv2.imshow(&quot;Frame&quot;, frame)
+</code></pre>
+<h2 id="invisibility">Invisibility</h2>
+<p>Now that we know the building blocks, we can start building our invisibility project.</p>
+<p>First, we need to take a photo of the background. To do this we simply open the camera and take an image.</p>
+<pre><code class="language-python">cap = cv2.VideoCapture(0)
+
+start = time.time()
+
+&quot;&quot;&quot;get background&quot;&quot;&quot;
+while int(time.time() - start) &lt; 3:     # wait for seconds
+    global background
+    _, background = cap.read()
+    cv2.imshow(&quot;Background&quot;, background)
+    cv2.waitKey(1)
+</code></pre>
+<p>In the code above, I am also waiting for 3 seconds. This is just enough time for pressing a key and moving out of the frame.</p>
+<p>We now take the foreground image and apply the threshold to it. This gives us a mask of the object we want to remove.</p>
+<pre><code class="language-python"> _, frame = cap.read()
+hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+mask = cv2.inRange(hsv, low_thresh, high_thresh)
+invisible1 = cv2.bitwise_and(background, background , mask = mask)
+</code></pre>
+<p>Here, we create the mask from the foreground image but use the background image to replace it. This is opposite to what we had done in the example above where we have used the mask to select the region from the same image.</p>
+<p><img src="imgs/invisibility-using-open-cv/background.jpg" alt="" /></p>
+<p>There is one problem though. The rest of the image has black pixels because of the mask. We need to fill the rest of the image with the foreground. For this, we need an inverse mask. Inverting a mask is very simple. We know that the highest value in the mask is 255. To invert the mask all we need to do is subtract 255 with the value of the pixel in the mask. That means if the value of a pixel is 0 then 255 - 0 will be 255. Similarly, 255 will become 0.</p>
+<pre><code class="language-python">mask_inv = 255 - mask
+</code></pre>
+<p>This subtracts 255 with each value in the mask.</p>
+<p>We can then create the foreground as</p>
+<pre><code class="language-python">invisible2 = cv2.bitwise_and(frame, frame, mask=mask_inv)
+</code></pre>
+<p><img src="imgs/invisibility-using-open-cv/foreground.jpg" alt="" /></p>
+<p>Finally, we add both the background and the foreground to get the final image.</p>
+<pre><code class="language-python">invisible = cv2.add(invisible1, invisible2)
+cv2.imshow(&quot;Invisibility&quot;, invisible)
+</code></pre>
+<p>That's the entire logic of the code. We get the result as</p>
+<p><img src="imgs/invisibility-using-open-cv/final.jpg" alt="" /></p>
+<p>You can grab the entire code <a href="https://github.com/ashwinvaidya17/Invisibility-OpenCV">here</a>.</p>
+<p>Thanks for reading 😎</p>
+</main><footer>© <a href="index.html">Ashwin Vaidya</a></footer></body></html>

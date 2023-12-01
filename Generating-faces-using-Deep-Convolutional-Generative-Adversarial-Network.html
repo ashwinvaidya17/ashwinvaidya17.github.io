@@ -1,0 +1,165 @@
+<!DOCTYPE html><html lang='en'><head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ashwin Vaidya</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;1,300&family=Noto+Sans:wght@200&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/apprentice.min.css"
+  />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script
+    id="MathJax-script"
+    async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+  ></script>
+
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+<body><header><a href="index.html" class="siteHeader">Ashwin Vaidya</a>
+<a class="aboutHeader" href="about.html">About</a>
+</header><main><div class='metadata'><span class='extra-info'>Originally Published on 28th July 2019</span>|<span class='last-updated'>Last Updated: December 2023</span></div><h1 class='title'>Generating faces using Deep Convolutional Generative Adversarial Network (DCGAN)</h1><div class='toc'><h2>Table of Contents</h2><ul>
+<li><a href="#generative-network">Generative Network</a></li>
+<li><a href="#generative-adversarial-network">Generative Adversarial Network</a></li>
+<li><a href="#implementation">Implementation</a></li>
+</ul>
+</div><p>The internet is abundant with videos of algorithm turning horses to zebras or fake Obama giving a talk. Earlier people were obsessed with making their photos imitate some famous artist's style, now they are obsessed with looking old. All this is possible by a kind of neural network called Generative Adversarial Network or GAN for short. GANs were first proposed by <a href="https://papers.nips.cc/paper/5423-generative-adversarial-nets.pdf">Goodfellow et. al.</a> I had been postponing looking into GANs until recently. I have spent the past few days understanding GAN and in this post, I attempt to explain it.</p>
+<p>Let me just recap neural networks before I go into GANs.
+Consider the neural network to be a function. It gets some input and produces some output.</p>
+<p><img src="imgs/faces-dcgan/fig1.jpg" alt="" /></p>
+<p>Now, I won’t go into the internal workings of a neural network as it is a topic for another <a href="https://ashwinvaidya.com/blog/a-very-basic-introduction-to-artificial-neural-network/">post</a>. The main thing here is that it is called a Universal Function Approximator. That is, it can approximate any function. I’ll just represent neural networks like this from now on.</p>
+<p><img src="imgs/faces-dcgan/fig2.jpg" alt="" /></p>
+<p>A function transforms values from input space to values in output space.</p>
+<p>Take the example of a simple line.</p>
+<p>$$y = 10x + 3$$</p>
+<p>If we have the inputs (x) as 1,2,3,4,5,6,7,8,9,10, they would become 13, 23, 33, 43, 53, 63, 73, 83, 93, 103. As you can see, the function transforms the input from one value to another value.</p>
+<p><img src="imgs/faces-dcgan/line.png" alt="" /></p>
+<p>Apart from changing one value to another, a function can also change the feature space of these values. Let’s expand on the above equation.</p>
+<p>$$y = x$$</p>
+<p>$$z = 10x + 3$$</p>
+<p>If we plot this, we get a plane. We have now gone from one-dimensional input to two-dimensional output.</p>
+<p><img src="imgs/faces-dcgan/plane.jpg" alt="" /></p>
+<h2 id="generative-network">Generative Network</h2>
+<p>For most of the tasks, we have used neural networks as a <strong>discriminative model</strong>. <em>Hey! is this image is of a cat of a dog.</em> This model does not care about how the data was generated. Its task is to just classify the input.</p>
+<p><img src="imgs/faces-dcgan/fig3.jpg" alt="" /></p>
+<p>A <strong>generative model</strong>, on the other hand, tries to model how the data was generated. If it is told that the image is of a cat, then it tries to generate the original image based on the label.</p>
+<p>If the task is to generate images of faces, the neural network needs to learn the function that maps some input to output as faces. Something like this.
+<img src="imgs/faces-dcgan/fig4.jpg" alt="" /></p>
+<p>Say, we had an input size of 100 i.e [x1, x2, ……, x100] and output as 128x128 dimension image. The network has to not only learn to transform 100 dimentional input to an image but also has to increase the feature space.
+<img src="imgs/faces-dcgan/fig5.jpg" alt="" /></p>
+<h2 id="generative-adversarial-network">Generative Adversarial Network</h2>
+<p>Now the question becomes how do we train such a model. This is where the adversarial part comes in. GANs consists of two networks, one to produce the image from a given input and the other to see the image and tell whether it is from the real data or generated data. Taking the example given in the paper by <a href="https://papers.nips.cc/paper/5423-generative-adversarial-nets.pdf">Goodfellow et. al.</a>, the generator can be considered as a counterfeiter of fake currency and the discriminator as police trying to detect fake currency. This competition between them improves the fakes generated by the counterfeiter untill the fakes cannot be distinguished from real.</p>
+<p><img src="imgs/faces-dcgan/fig5.jpg" alt="" />
+<em>Generator</em></p>
+<p><img src="imgs/faces-dcgan/fig6.jpg" alt="" />
+<em>Discriminator</em></p>
+<p>Let D(x) be the probability that the discriminator outputs. Ideally, the discriminator outputs probability 1 for real images and 0 for fake images. Let G(z) be the output images of the generator given initial vector z. We want the discriminator to correctly classify images of both the class. The discriminator should maximize $$log(D(x)) + log(1- D(G(z)))$$ This means that the discriminator should maximize the probability of predicting correct classes + the probability of identifying fake images. Similarly, the generator has to minimize $$log(1-(D(G(x))))$$ That is, for fake images discriminator produces a value close to 1 (label for real images) leading to a value close to 0.</p>
+<h2 id="implementation">Implementation</h2>
+<p>Well, that was the meat of the algorithm. We are going to implement a variant of GAN called DCGAN (Deep Convolutional Generative Adversarial Network). This was proposed by <a href="https://arxiv.org/abs/1511.06434">Alec et. al.</a> which uses CNNs instead of fully connected layers as in vanilla GAN.</p>
+<p>The entire code is available <a href="https://github.com/ashwinvaidya17/DCGAN-faces/blob/master/GAN_celebrity.ipynb">here</a>. I will be explaining only the important parts of the code below.</p>
+<p>Let’s start by creating the discriminator</p>
+<pre><code class="language-python">class Discriminator(nn.Module):
+    def __init__(self):
+        super(Discriminator, self).__init__()
+        self.main = nn.Sequential(
+                    nn.Conv2d(nchannels, ndf, 4, stride=2, padding=1, bias=False),
+                    nn.LeakyReLU(negative_slope=0.2, inplace=True),
+
+                    nn.Conv2d(ndf, ndf*2, 4, stride=2, padding=1, bias=False),
+                    nn.BatchNorm2d(ndf*2),
+                    nn.LeakyReLU(negative_slope=0.2, inplace=True),
+
+                    nn.Conv2d(ndf*2, ndf*4, 4, stride=2, padding=1, bias=False),
+                    nn.BatchNorm2d(ndf*4),
+                    nn.LeakyReLU(negative_slope=0.2, inplace=True),
+
+                    nn.Conv2d(ndf*4, ndf*8, 4, stride=2, padding=1, bias=False),
+                    nn.BatchNorm2d(ndf*8),
+                    nn.LeakyReLU(negative_slope=0.2, inplace=True),
+
+                    nn.Conv2d(ndf*8, 1, 4, stride=1, padding=0, bias=False),
+                    nn.Sigmoid()
+                    )
+
+    def forward(self, input):
+        return self.main(input)
+</code></pre>
+<p>The discriminator is a standard CNN which takes image data as input and produces a single output. One thing to note is that this architecture does not have max-pool layer but uses batch normalization.</p>
+<p>Now, we create the generator.</p>
+<pre><code class="language-python">class Generator(nn.Module):
+    def __init__(self):
+        super(Generator, self).__init__()
+
+        self.main = nn.Sequential(
+                    nn.ConvTranspose2d(nz, ngf*8, 4, stride=1, padding=0, bias=False),
+                    nn.BatchNorm2d(ngf*8),
+                    nn.ReLU(True),
+                    nn.ConvTranspose2d(ngf*8, ngf*4, 4, stride=2, padding=1, bias=False),
+                    nn.BatchNorm2d(ngf*4),
+                    nn.ReLU(True),
+                    nn.ConvTranspose2d(ngf*4, ngf*2, 4, stride=2, padding=1, bias=False),
+                    nn.BatchNorm2d(ngf*2),
+                    nn.ReLU(True),
+                    nn.ConvTranspose2d(ngf*2, ngf, 4, stride=2, padding=1, bias=False),
+                    nn.BatchNorm2d(ngf),
+                    nn.ReLU(True),
+                    nn.ConvTranspose2d(ngf,nchannels, 4, stride=2, padding=1, bias=False),
+                    nn.Tanh())
+
+    def forward(self, input):
+        output = self.main(input)
+        return output
+</code></pre>
+<p>The generator takes the 100 dimension vector and converts it into an image. To do this it needs to up-sample the input. Up-sampling is done by transposed convolutional layer. A convolutional layer down-samples the image by passing a filter over it. The transposed convolutional layer works oppositely. <a href="https://github.com/vdumoulin/conv_arithmetic/blob/master/README.md">This image</a> shows the transposed convolutional operation. These layers help increase feature space so that we can go from 100 dimentional input to 128x128 RGB images.</p>
+<p>We initialize the two networks as</p>
+<pre><code>netG = Generator().to(device)
+netD = Discriminator().to(device)
+</code></pre>
+<p>Now that we have defined the two networks, we can train the model.
+In each epoch for the batch of images we do the following:</p>
+<p>We first take the real images and pass them through the discriminator. The real labels and the output of the network is passed to the loss function.</p>
+<pre><code class="language-python">netD.zero_grad()
+real = data[0].to(device)
+b_size = real.size(0)
+label = torch.full((b_size,), real_label,device=device)
+output = netD(real).view(-1)
+errD_real = criterion(output, label)
+errD_real.backward()
+</code></pre>
+<p>We then generate some random noise and pass it through the generator to get the fake images. These images with their label are passed to the loss function.</p>
+<pre><code class="language-python">noise = torch.randn(b_size, nz, 1, 1, device=device)
+fake = netG(noise)
+label.fill_(fake_label)
+output = netD(fake.detach()).view(-1)
+errD_fake = criterion(output, label)
+errD_fake.backward()
+</code></pre>
+<p>Finally, we do a single gradient step on the discriminator.</p>
+<pre><code class="language-python">errD = errD_real + errD_fake
+optimizerD.step()
+</code></pre>
+<p>Next, we train the generator. Labels are gathered by passing the fake images through the discriminator. The target labels are set to 1 this time as we want the generator to learn to create realistic images. The error for the generator is calculated using the labels provided by the discriminator and the target label (1 for each image).</p>
+<pre><code class="language-python">netG.zero_grad()
+label.fill_(real_label)
+output = netD(fake).view(-1)
+errG = criterion(output, label)
+errG.backward()
+optimizerG.step()
+</code></pre>
+<p>That is it. These two networks finally reach a point where neither improves each other. This is the saddle point.</p>
+<p>Finally, you get the results like these.
+<img src="imgs/faces-dcgan/real_fake.jpg" alt="" /></p>
+<p>Here is a gif of the generated images over training:</p>
+<p><img src="imgs/faces-dcgan/training.gif" alt="" /></p>
+<p>You can grab the entire code <a href="https://github.com/ashwinvaidya17/DCGAN-faces/blob/master/GAN_celebrity.ipynb">here</a>.</p>
+<p>Thanks for reading 😎</p>
+</main><footer>© <a href="index.html">Ashwin Vaidya</a></footer></body></html>

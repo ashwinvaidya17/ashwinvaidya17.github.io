@@ -1,0 +1,97 @@
+<!DOCTYPE html><html lang='en'><head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ashwin Vaidya</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;1,300&family=Noto+Sans:wght@200&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/apprentice.min.css"
+  />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script
+    id="MathJax-script"
+    async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+  ></script>
+
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+<body><header><a href="index.html" class="siteHeader">Ashwin Vaidya</a>
+<a class="aboutHeader" href="about.html">About</a>
+</header><main><div class='metadata'><span class='extra-info'>Originally Posted on 8th September 2019</span>|<span class='last-updated'>Last Updated: December 2023</span></div><h1 class='title'>AutoEmailer</h1><p>During my undergraduate, I was part of an organization called MIT Computer Users Group (MCUG). The group conducted activities such as teaching Linux. At that time we also published a quarterly newsletter explaining the latest in technology. We only made two physical copies while distributed it in digital format to the rest. Our mailing list consisted of 200+ teachers and included group emails of our alumni. We didn't use any mailing service and kept the email ids in a text file. When the time came to send the emails, we would split the list between each member and manually send the mail with the attachment individually. The challenge increased as we had to address the mail properly - &quot;Dear Sir&quot;, &quot;Dear Ma'am&quot;, &quot;Greeting Students&quot;. As you can see this process was very tedious and time-consuming. After being fed-up with doing this each time we released an issue, I decided to write some script to automate this process. After all, I was pursuing computer engineering.</p>
+<p>At that time I did not know python programming. I have seen that the best way to learn a programming language or a framework is by using it for a project. This way I don't end up parroting the tutorial and have a project that is useful to me. So, I decided that a python script to automate the process of sending the emails was a good way to learn the language and solve my problem.</p>
+<p>I broke down the task as follows.</p>
+<ol>
+<li>The first thing I needed was a way to send emails using Python.</li>
+<li>Then, I needed a way to read the email list and sort it according to male teachers, female teachers and students.</li>
+<li>Finally, I needed to figure out how to attach the pdf file to the mail.</li>
+</ol>
+<p>After searching a bit on Google, I found out about a library in python called <code>smtp</code>.</p>
+<p>Simple Mail Transfer Protocol (SMTP) is a protocol that handles the transfer of mail between servers. It is just used for delivering a message. This was exactly what I needed. Using the <code>smtp</code> python library made it sending the message as easy as this.</p>
+<pre><code class="language-python">def send_mail( send_from, send_to, subject, text, server, port, username, password):
+    msg = MIMEMultipart()
+    msg[&#x27;From&#x27;] = send_from
+    msg[&#x27;To&#x27;] = send_to
+    msg[&#x27;Date&#x27;] = formatdate(localtime = True)
+    msg[&#x27;Subject&#x27;] = subject
+
+    msg.attach( MIMEText(text))
+
+    smtp = smtplib.SMTP(server, port)
+    smtp.starttls()
+    smtp.login(username,password)
+    smtp.sendmail(send_from, send_to, msg.as_string())
+    smtp.quit()
+</code></pre>
+<p>There was one caveat though. Using <code>smtp</code> with Gmail meant that I had to enable &quot;Less secure app access&quot; each time I want to use the program. This has good reasons though as SMTP deals with the account password in plain-text. As this was a minor security issue, I went ahead and <a href="https://support.google.com/accounts/answer/6010255"><em>enabled less secure app access</em></a>. Now I was good to proceed.</p>
+<p>For the second part, I decided to just manually sort the list into three (one for each category) and just read from each file seperatly.</p>
+<pre><code class="language-python">with open(&quot;student_emails.txt&quot;) as file:
+    student_emails_array = [i.strip() for i in file]
+with open(&quot;mteachers_emails.txt&quot;) as file:
+    mteachers_emails_array = [i.strip() for i in file]
+with open(&quot;fteachers_emails.txt&quot;) as file:
+    fteachers_emails_array = [i.strip() for i in file]
+</code></pre>
+<p>After, a bit of lazy programming, I now had three body content with almost the same text.</p>
+<pre><code class="language-python">bodyStudent =  &quot;Hello, \nWe are pleased to bring you the June’17 edition of MCUG Newsletter.\nHope you like it! Your valuable suggestions will help us in improving future editions .\nPFA\n\nRegards,\nMCUG Newsletter Team.&quot;
+bodyMTeachers = &quot;Dear Sir,\nWe are pleased ...
+bodyFTeachers = &quot;Dear Ma&#x27;am,\nWe are pleased ...
+</code></pre>
+<p>Finally, it was time to attach the Newsletter. Luckily, even this part didn't turn out to be complicated. A little search on Google led me to make minor changes in the <code>send_mail</code> function.</p>
+<pre><code class="language-python">def send_mail( send_from, send_to, subject, text, files, server, port, username, password):
+    msg = MIMEMultipart()
+    msg[&#x27;From&#x27;] = send_from
+    msg[&#x27;To&#x27;] = send_to
+    msg[&#x27;Date&#x27;] = formatdate(localtime = True)
+    msg[&#x27;Subject&#x27;] = subject
+
+    msg.attach( MIMEText(text) )
+
+    for f in files:
+        part = MIMEBase(&#x27;application&#x27;, &quot;octet-stream&quot;)
+        part.set_payload( open(f,&quot;rb&quot;).read() )
+        encoders.encode_base64(part)
+        part.add_header(&#x27;Content-Disposition&#x27;, &#x27;attachment; filename=&quot;{0}&quot;&#x27;.format(os.path.basename(f)))
+        msg.attach(part)
+
+    smtp = smtplib.SMTP(server, port)
+    smtp.starttls()
+    smtp.login(username,password)
+    smtp.sendmail(send_from, send_to, msg.as_string())
+    smtp.quit()
+</code></pre>
+<p>And that was it! Seeing it send emails one by one to a mailing list of ~200 teachers was pretty comforting and satisfying.</p>
+<p>This was the only image I could dig up for my working program.</p>
+<p><img src="imgs/autoemailer/AutoEmailer.jpg" alt="" title="AutoEmailer in Action" /></p>
+<p>You can grab the entire code <a href="https://github.com/ashwinvaidya17/AutoEmailer">here</a>.</p>
+<p>Thanks for reading 😎</p>
+</main><footer>© <a href="index.html">Ashwin Vaidya</a></footer></body></html>

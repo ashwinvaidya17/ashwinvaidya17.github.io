@@ -1,0 +1,44 @@
+<!DOCTYPE html><html lang='en'><head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ashwin Vaidya</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;1,300&family=Noto+Sans:wght@200&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/apprentice.min.css"
+  />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script
+    id="MathJax-script"
+    async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+  ></script>
+
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+<body><header><a href="index.html" class="siteHeader">Ashwin Vaidya</a>
+<a class="aboutHeader" href="about.html">About</a>
+</header><main><div class='metadata'><span class='extra-info'>Originally published on 24th August 2018</span>|<span class='last-updated'>Last Updated: December 2023</span></div><h1 class='title'>Elon Musk vs Neil Degrasse Tyson Image Classifier Using Tensorflow</h1><p><img src="imgs/elon-neil-classifier/elon.jpg" alt="" />
+<img src="imgs/elon-neil-classifier/neil.jpg" alt="" /></p>
+<p>As part of my quest to learn Deep Learning, I wanted to make a classifier for images. One of the very first tutorials in Deep Learning that one will come across is a Cats vs Dogs classifier. So obviously I decided to implement it, except for one change. But since I am a big fan of Elon Musk and Neil deGrasse Tyson I decided to make the classifier of the two.</p>
+<p>However, I realised that the <em><strong>biggest challenge was acquiring the dataset.</strong></em></p>
+<p>First, unlike the Cats vs Dogs dataset which has around 25,000 images, there is no dataset available for Elon Musk and Neil deGrasse Tyson. So I decided to gather my own dataset from Google images. For this, I installed a plugin for Chrome to download the images. But each time Chrome ended up crashing. I had to look for some other strategy. After a bit of searching, I found a <a href="https://github.com/hardikvasa/google-images-download">Python script</a> which could download the images I needed.</p>
+<p>Now I hit the second challenge. Though there are adequate images available of Neil deGrasse Tyson, not so of Elon Musk. A continuous scroll down on Google images will exhaust the result. And I did not want to skew the dataset by having Neil's images outnumbering Elon's.</p>
+<p>So, I was left with merely about 400 images of each. Any effective classifier would need a lot more than that. When I started training my model, it started to get an accuracy of 1 on the training data and a low score on the validation set. The only way to improve the model was to gather more data. But, with the limited images available, getting more images was not an option.</p>
+<p><strong>Data Augnemtation</strong>. Here comes data augmentation. It is a method to increase the data size. When working with images, new data can be created by scaling, rotating, cropping, adding noise and flipping them. Thus, increasing the size of the dataset. (You can read more about data augmentation <a href="https://medium.com/nanonets/how-to-use-deep-learning-when-you-have-limited-data-part-2-data-augmentation-c26971dc8ced">here</a>). So, I flipped the images around the y-axis. Now, I had ~800 images of each thus doubling my dataset!</p>
+<p>With this, I again started to train my classifier.</p>
+<p>Aaaanndd…………nope! Still no improvement!</p>
+<p>I was missing something. So, here is something — if you have a lot of images of cats and some of them have cats only as a small part of the image, it will not be an issue for the neural network. However, when the dataset is small this can be a significant issue. In my classifier, both Elon and Neil weren't the only ones in the image. And, with flipping and adding another data point, I now had two sets of images with other people in them as well. I had only one option. To manually crop the original images. Sorry, Amber and Grimes.</p>
+<p>Finally, with the batch size 10 and 5 epochs, I got the validation accuracy of 80%.</p>
+<p>You can grab the code <a href="https://github.com/ashwinvaidya17/Elon-vs-Neil-Classifier">here</a></p>
+<p>Thanks for reading</p>
+</main><footer>© <a href="index.html">Ashwin Vaidya</a></footer></body></html>

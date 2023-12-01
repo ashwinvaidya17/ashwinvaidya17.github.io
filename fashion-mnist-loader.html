@@ -1,0 +1,226 @@
+<!DOCTYPE html><html lang='en'><head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ashwin Vaidya</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;1,300&family=Noto+Sans:wght@200&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/apprentice.min.css"
+  />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script
+    id="MathJax-script"
+    async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+  ></script>
+
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+<body><header><a href="index.html" class="siteHeader">Ashwin Vaidya</a>
+<a class="aboutHeader" href="about.html">About</a>
+</header><main><div class='metadata'><span class='extra-info'>Originally published on 29th April 2019</span>|<span class='last-updated'>Last Updated: December 2023</span></div><h1 class='title'>Fashion MNIST Loader</h1><div class='toc'><h2>Table of Contents</h2><ul>
+<li><a href="#motivation">Motivation</a></li>
+<li><a href="#directory-structure">Directory Structure</a></li>
+<li><a href="#scripts">Scripts</a></li>
+</ul>
+</div><h1 id="motivation">Motivation</h1>
+<p>The fashion MNIST dataset is a replacement of the MNIST dataset. Like the 10 digits, it has 10 classes.</p>
+<table>
+  <tr>
+    <th>
+      <strong>Label</strong>
+    </th>
+    <th>
+      <strong>Description</strong>
+    </th>
+  </tr>
+  <tr>
+    <td>
+    </td>
+    <td>
+      T-shirt/top
+    </td>
+  </tr>
+  <tr>
+    <td>
+      1
+    </td>
+    <td>
+      Trouser
+    </td>
+  </tr>
+  <tr>
+    <td>
+      2
+    </td>
+    <td>
+      Pullover
+    </td>
+  </tr>
+  <tr>
+    <td>
+      3
+    </td>
+    <td>
+      Dress
+    </td>
+  </tr>
+  <tr>
+    <td>
+      4
+    </td>
+    <td>
+      Coat
+    </td>
+  </tr>
+  <tr>
+    <td>
+      5
+    </td>
+    <td>
+      Sandal
+    </td>
+  </tr>
+  <tr>
+    <td>
+      6
+    </td>
+    <td>
+      Shirt
+    </td>
+  </tr>
+  <tr>
+    <td>
+      7
+    </td>
+    <td>
+      Sneaker
+    </td>
+  </tr>
+  <tr>
+    <td>
+      8
+    </td>
+    <td>
+      Bag
+    </td>
+  </tr>
+  <tr>
+    <td>
+      9
+    </td>
+    <td>
+      Ankle boot
+    </td>
+  </tr>
+</table>
+<p>While it comes bundled with many deep learning libraries, I wanted to use it for my own project. One choice would have been to download it from here<a href="https://github.com/zalandoresearch/fashion-mnist">: https://github.com/zalandoresearch/fashion-mnist</a>. Then extract the dataset and finally load it in my program.</p>
+<p>As a programmer, I am not a big fan of doing things on my own. Further, this method is not scalable. If I want a different dataset in the future I will have to perform the same steps manually and create another loader for that data. So, I decided to write my own data loader.</p>
+<h1 id="directory-structure">Directory Structure</h1>
+<p>I created two scripts: data_downloader.py and fashion_mnist.py. The idea is that data_downloader will be common utility for all the loaders to download their respective datasets. fashion_mnist contains specific code to load the data and the web urls to pass to the data_downloader to fetch the data.</p>
+<p>The folder structure is as follows:</p>
+<p>utils/data_downloader.py<br />
+datasets/fashion_mnist.py</p>
+<p>The datasets folder is separate to have a single directory for loader scripts of different datasets and keep them separate from the common utilities.</p>
+<h1 id="scripts">Scripts</h1>
+<p>Both the scripts are given below:</p>
+<pre><code class="language-python">&quot;&quot;&quot;data_downloader.py
+Common functions for downloading dataset
+&quot;&quot;&quot;
+
+import os
+import requests
+
+def get_file(fname, origin, cache_subdir):
+    &quot;&quot;&quot;Downloads the file from URL is it is not yet in cache
+    Arguments
+    fname: name of the file
+    origin: Remote URL of the file
+
+    Return: Path to downloaded file
+    &quot;&quot;&quot;
+
+    cache_dir = os.path.join(os.path.expanduser(&#x27;~&#x27;), &#x27;.datasets&#x27;) # create temporary download location
+    datadir = os.path.join(cache_dir, cache_subdir)
+    if not os.path.exists(datadir):
+        os.makedirs(datadir)
+    fpath = os.path.join(datadir, fname)
+
+    if not os.path.exists(fpath):
+        print(fname, &quot;does not exist&quot;)
+        print(&quot;Downloading data from&quot;, origin)
+        r = requests.get(origin, stream = True)
+        with open(fpath, &#x27;wb&#x27;) as file:
+            for chunk in r.iter_content(chunk_size = 1024):
+                if chunk:
+                    file.write(chunk)
+        print(&quot;Finished downloading &quot;, fname)
+
+    return fpath
+</code></pre>
+<p>The datasets are downloaded into a directory named .<em>datasets</em> in the home folder of the user. Linux/OSX systems consider files and directories that start with a dot as hidden. Keeping the downloaded datasets folder reduces visible clutter in the home directory. The script also creates another folder inside the .datasets folder with the name of the dataset for storing the downloaded data. I may add file integrity check in the future but this works for now.</p>
+<pre><code class="language-python">&quot;&quot;&quot; fashion_mnist.py
+Fashion MNIST dataset loader
+&quot;&quot;&quot;
+
+import gzip
+import os
+import numpy as np
+from ..utils.data_downloader import get_file
+
+
+def load_data():
+    &quot;&quot;&quot; Loads the Fashion MNIST dataset
+    return: x_train, y_train, x_test, y_test
+    &quot;&quot;&quot;
+    dirname = os.path.join(&#x27;datasets&#x27;, &#x27;fashion_mnist&#x27;)
+    base = &#x27;http://fashion-mnist.s3-website.eu-central-1.amazonaws.com/&#x27;
+    files = [&#x27;train-labels-idx1-ubyte.gz&#x27;, &#x27;train-images-idx3-ubyte.gz&#x27;,
+             &#x27;t10k-labels-idx1-ubyte.gz&#x27;, &#x27;t10k-images-idx3-ubyte.gz&#x27;]
+
+    paths = []
+
+    for fname in files:
+        paths.append(get_file(fname, origin=base + fname, cache_subdir=dirname))
+
+    with gzip.open(paths[0], &#x27;rb&#x27;) as lbpath:
+        y_train = np.frombuffer(lbpath.read(), np.uint8, offset=8)
+
+    with gzip.open(paths[1], &#x27;rb&#x27;) as imgpath:
+        x_train = np.frombuffer(imgpath.read(), np.uint8,
+                                offset=16).reshape(len(y_train), 28, 28)
+
+    with gzip.open(paths[2], &#x27;rb&#x27;) as lbpath:
+        y_test = np.frombuffer(lbpath.read(), np.uint8, offset=8)
+
+
+    with gzip.open(paths[3], &#x27;rb&#x27;) as imgpath:
+        x_test = np.frombuffer(imgpath.read(), np.uint8,
+                               offset=16).reshape(len(y_test), 28, 28)
+
+    y_train = [vectorize_data(i) for i in y_train]
+    y_test = [vectorize_data(i) for i in y_test]
+
+    return x_train, y_train, x_test, y_test
+
+def vectorize_data(y):
+    e = np.zeros((10,1))
+    e[y] = 1.0
+    return e
+</code></pre>
+<p>The original data contains each image represented in a 2D array and the corresponding labels as a single digit. I am not flattening the image here as 2D input is convenient when using Convolutional Neural Networks. The label is vectorized because the output layer of any neural network will be of 10 units each representing a single digit. It is easier to vectorize here and convert it to pure labels later if required.</p>
+<p>And finally you can import the dataset as:</p>
+<pre><code class="language-python">from datasets import fashion_mnist
+x_train, y_train, x_test, y_test = fashion_mnist.load_data()
+</code></pre>
+<p>Thanks for reading 😎</p>
+</main><footer>© <a href="index.html">Ashwin Vaidya</a></footer></body></html>

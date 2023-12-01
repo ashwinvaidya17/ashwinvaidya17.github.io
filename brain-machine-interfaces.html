@@ -1,0 +1,62 @@
+<!DOCTYPE html><html lang='en'><head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ashwin Vaidya</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;1,300&family=Noto+Sans:wght@200&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/apprentice.min.css"
+  />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script
+    id="MathJax-script"
+    async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+  ></script>
+
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+<body><header><a href="index.html" class="siteHeader">Ashwin Vaidya</a>
+<a class="aboutHeader" href="about.html">About</a>
+</header><main><div class='metadata'><span class='extra-info'>This was originally published in June’17 issue of MCUG newsletter. First posted online on 14th August 2018</span>|<span class='last-updated'>Last Updated: December 2023</span></div><h1 class='title'>Brain Machine Interfaces</h1><div class='toc'><h2>Table of Contents</h2><ul>
+<li><a href="#first-the-brain-machine-interface">First, The Brain Machine Interface?</a></li>
+<li><a href="#the-brain">The Brain</a></li>
+<li><a href="#how-to-read-and-stimulate-neurons">How to read and stimulate neurons?</a></li>
+<li><a href="#possibilities">Possibilities</a></li>
+<li><a href="#sources">Sources:</a></li>
+</ul>
+</div><p>Remember the Matrix? Neo had these plugs connected to him which helped him enter the Matrix, where he could move, feel, fly or even stop bullets in mid-air. Or the movie Avatar, where Jake lies in a capsule which helps him control the Avatar. Sure they are all science fiction, but are we really far off from having our brain directly connected to a computer? Well, yes and no. While research is being made toward restoring motor functions of the physically disabled by giving robotics limbs that they can control with their mind(so Avatar is covered), we are still far from entering our favourite game or any virtual environment(Matrix has to wait for a while). This article attempts to explain how these technological feats are being achieved and where are we headed.</p>
+<h1 id="first-the-brain-machine-interface">First, The Brain Machine Interface?</h1>
+<p>Think of brain like a remote control controlling your body. When you think of moving your arm, the brain sends a signal through the nerves passing through your spinal cord. The spine and the intermediate nerves can be thought analogous to a channel. Now imagine that you tap the connections in between and send and receive artificial signals. You could project a movie directly to your visual cortex without having to wear a VR headset. Or even better, send all motor functions to a computer and send all sensory functions from computer to brain and you will be able to physically(in a way as all the brain perceives of the physical world is from the senses) enter a game. This sounds sci-fi-ish, but early uses of this technology have already shown results. This technology is known as Brain Machine Interface (BMI) or Brain Computer Interface (BCI).<br />
+BMI is the direct connection pathway between the brain and an external device. It performs two functions: recording neurons and stimulating neurons. It is not always necessary to have bidirectional communication between the machine and the brain. Hearing aids for example only need to stimulate the neurons. There are three broad criteria for designing BMIs.</p>
+<ol>
+<li>Scale: number of neurons that can be simultaneously recorded.</li>
+<li>Resolution: how detailed is the information the tool receives—there are two types of resolution; spatial (how closely your recordings come to telling you how individual neurons are firing) and temporal (how well you can determine when the activity you record happened)</li>
+<li>Invasiveness: is surgery needed, and if so, how extensively.</li>
+</ol>
+<h1 id="the-brain">The Brain</h1>
+<p>To understand how to interface the brain with any device we have to know how the brain works. So, here is an oversimplified explanation of the brain. Brain is a densely packed complex structure. It is made up of hundreds of billions of neurons. Each neuron’s axon has a negative “resting potential”, which means that when it’s at rest, its electrical charge is slightly negative. And it is connected to many dendrites of other neurons. These dendrites release neurotransmitters which raise or lower the charge on the neurons. If the neuron’s charge rises over a certain threshold the neuron triggers. Now if we have a network of such neurons we get a neural network. We have many such networks in our brain which are responsible for various tasks. Let’s call them modules for now.<br />
+This is how Ray Kurzweil explains this in his 2014 TED Talk, “ Consider a simple example. We’ve got a bunch of modules that can recognize the crossbar to a capital A, and that's all they care about.They don't care if a song is playing or you are seeing a movie, but when they see a crossbar to a capital A, they get very excited and they say &quot;crossbar,&quot; . That goes to the next level. Each is more abstract than the next one, so the next one might say &quot;capital A.&quot; That goes up to a higher level that might say &quot;Apple.&quot; Go up another five levels, and you're now at a pretty high level of this hierarchy, and stretch down into the different senses, and you may have a module that sees a certain fabric, hears a certain voice quality, smells a certain perfume, and will say, &quot;My friend has entered the room.&quot; Go up another 10 levels, and now you're at a very high level. You'll have modules that say, &quot;That was ironic. That's funny. She is pretty.&quot; You might think that those are more sophisticated, but actually what's more complicated is the hierarchy beneath them.”<br />
+So now you would have an idea of how complicated the functioning of the brain is. The challenge lies in interfacing such a complex biological machine to a silicon based one. Well, researchers have found few means to interface the two and some of them are already in use.</p>
+<h1 id="how-to-read-and-stimulate-neurons">How to read and stimulate neurons?</h1>
+<p>Consider the task of moving an artificial arm. You need to read the motor signals from the brain and send them to the computer which will tell the arm to move. This still does not solve the entire problem. The patient does not feel the artificial limb like it was his/her own arm, the way you would feel when say you lift your arm. This inability to be aware of the position of one’s limb is called ‘proprioception’. Overcoming this requires a feedback to the brain from the limb.</p>
+<p>A commonly used but invasive (requires opening the skull) technique is to implant electrodes in the brain which can stimulate neurons, or record their activity. The non-invasive techniques can however only record.</p>
+<p>A few examples of current generation BMI tools are, fMRI (functional magnetic resonance imaging), EEG (electroencephalography), ECoG (electrocorticography), LFP (Local Field Potential), Single-Unit Recording. A technology under research is ‘neural lace’. It is an ultra-thin mesh that can be implanted in the skull, forming a collection of electrodes capable of monitoring brain function. To insert neural lace, a tiny needle containing the rolled up mesh is placed inside the skull and the mesh is injected. As the mesh leaves the needle it unravels, spanning the brain. Another idea is nano ferrous dust that can be dissolved in water, which then reaches the brain through blood stream and under changing magnetic field heats up due to hysteresis. This then triggers its nearby neurons.</p>
+<h1 id="possibilities">Possibilities</h1>
+<p>BMI technology is still in its infancy but, the future holds endless possibilities. We will able to restore the full motor functions of paraplegics or quadriplegics. Imagine having your brain connected to the internet. You will have access to all the information just by thinking. And to take it a little further, imagine being connected to an AI which helps you think when you need. You will be able to offload heavy thinking tasks to the AI without even realising it. Even communication between individuals will improve as we will not be limited to using words and be able to send emotions directly. You will be able to store, share and re-experience your experiences from the cloud. Live streaming will happen from person’s point of view and you will be able to hear and smell whatever they hearing or smelling. And imagine having ability tweak internally, like removing addiction, depression and anxiety. Imagine representing something uncomfortable like pain to something like an auditory bell. Probably schools and colleges will not exist in the future. People will be expert in every field. You will be able to make yourself smarter by just downloading the required skills. You can then say like Neo, “I know kung-fu”. And who knows? You might have subscription services like “On Demand Intelligence”.</p>
+<h1 id="sources">Sources:</h1>
+<p><a href="https://www.ted.com/talks/ray_kurzweil_get_ready_for_hybrid_thinking">https://www.ted.com/talks/ray_kurzweil_get_ready_for_hybrid_thinking</a><br />
+<a href="http://waitbutwhy.com/2017/04/neuralink.html">http://waitbutwhy.com/2017/04/neuralink.html</a><br />
+<a href="https://www.youtube.com/watch?v=6Qi5uoNYXqg">https://www.youtube.com/watch?v=6Qi5uoNYXqg</a><br />
+<a href="https://en.wikipedia.org/wiki/Brain%E2%80%93computer_interface">https://en.wikipedia.org/wiki/Brain%E2%80%93computer_interface</a><br />
+<a href="http://www.techworld.com/data/what-is-neural-lace-3657074/">http://www.techworld.com/data/what-is-neural-lace-3657074/</a></p>
+</main><footer>© <a href="index.html">Ashwin Vaidya</a></footer></body></html>

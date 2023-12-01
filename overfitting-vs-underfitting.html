@@ -1,0 +1,71 @@
+<!DOCTYPE html><html lang='en'><head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ashwin Vaidya</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;1,300&family=Noto+Sans:wght@200&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/apprentice.min.css"
+  />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script
+    id="MathJax-script"
+    async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+  ></script>
+
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+<body><header><a href="index.html" class="siteHeader">Ashwin Vaidya</a>
+<a class="aboutHeader" href="about.html">About</a>
+</header><main><div class='metadata'><span class='extra-info'>Originally published on 24th January 2019</span>|<span class='last-updated'>Last Updated: December 2023</span></div><h1 class='title'>Overfitting vs Underfitting</h1><div class='toc'><h2>Table of Contents</h2><ul>
+<li><a href="#overfitting">Overfitting</a></li>
+<li><a href="#underfitting">Underfitting</a></li>
+</ul>
+</div><p>Supervised learning tasks are divided into two types, classification and regression. In classification tasks, the machine learning model has to find the decision boundary between the class variables. For example, classifying whether a given image is of a star or a supernova.</p>
+<p><img src="imgs/overfitting-underfitting/classification.png" alt="" /></p>
+<p><strong>Classification</strong></p>
+<p><img src="imgs/overfitting-underfitting/classification-boundary.png" alt="" /></p>
+<p><strong>With decision boundary</strong></p>
+<blockquote>
+<p><em>Note: This is a toy example and the actual plots and parameters may vary.</em></p>
+</blockquote>
+<p>In regression tasks, the machine learning model has to predict continuous values such as stock prices. Here, the model needs to find the best fit curve that approximates the unknown mapping function.</p>
+<p><img src="imgs/overfitting-underfitting/stocks.png" alt="" /></p>
+<p><strong>Stock Prices</strong></p>
+<p><img src="imgs/overfitting-underfitting/stocks-predicted.png" alt="" /></p>
+<p><strong>Predicting continuous values</strong></p>
+<p>In the following discussion, I will focus on the regression example, but the idea presented is applicable to classification tasks as well.</p>
+<p>Consider the following data points for the task of predicting house prices.</p>
+<p>Now, a curve can be fit onto the data which gives some prediction on the data.</p>
+<p><img src="imgs/overfitting-underfitting/house_prices-linear.png" alt="" /></p>
+<p>However, we can come up with a better fit onto the data.</p>
+<p><img src="imgs/overfitting-underfitting/house_prices-good.png" alt="" /></p>
+<p>And what about the following curve? It passes through all the points.</p>
+<p><img src="imgs/overfitting-underfitting/house_prices-overfit.png" alt="" /></p>
+<p>Surely, this is the best curve, right? No! Even though it fits the data well, it does not <em>generalize well</em>. What do I mean by generalizing? Consider that that we now have access to more data points.</p>
+<p><img src="imgs/overfitting-underfitting/house_prices-overfit-unknown.png" alt="" /></p>
+<p>This clearly does fit the new data. This model has internalized the training data. There is no guarantee that the data not yet observed will map to this equation. The prediction might be way off. What we need is a trade-off. Something that fits the original data and can predict the unknown data with realibility.</p>
+<h2 id="overfitting">Overfitting</h2>
+<blockquote>
+<p>When the model does not generalize well for new data but fits the training data too well, it is called overfitting.</p>
+</blockquote>
+<p><img src="imgs/overfitting-underfitting/house_prices-overfit.png" alt="" /></p>
+<h2 id="underfitting">Underfitting</h2>
+<blockquote>
+<p>When the model does not generalize well and does not even fit the training data, it is called underfitting.</p>
+</blockquote>
+<p><img src="imgs/overfitting-underfitting/house_prices-linear.png" alt="" /></p>
+<p>Hey! You have reached the end 😎. Thanks for reading.</p>
+<p>I would appreciate if you leave a comment below. Your suggestions will help me improve.</p>
+<p>Subscribe to stay updated and say Hi! to me on <a href="https://twitter.com/ashwinvaidya17">twitter</a> if you wish to.</p>
+</main><footer>© <a href="index.html">Ashwin Vaidya</a></footer></body></html>

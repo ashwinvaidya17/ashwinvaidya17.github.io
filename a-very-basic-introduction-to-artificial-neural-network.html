@@ -1,0 +1,70 @@
+<!DOCTYPE html><html lang='en'><head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ashwin Vaidya</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;1,300&family=Noto+Sans:wght@200&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/apprentice.min.css"
+  />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script
+    id="MathJax-script"
+    async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+  ></script>
+
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+<body><header><a href="index.html" class="siteHeader">Ashwin Vaidya</a>
+<a class="aboutHeader" href="about.html">About</a>
+</header><main><div class='metadata'><span class='extra-info'>Originally published on 29th January 2019</span>|<span class='last-updated'>Last Updated: December 2023</span></div><h1 class='title'>A Very Basic Introduction to Artificial Neural Network</h1><p>Yesterday, I was considering going for <em>The Most Epic Action Movie Ever</em>. Since it was an action movie, I was up right away. A quick search online revealed it having good ratings. That's great! I called my friends, informed my plans and they jumped in. All boxes ticked, so I went.<br />
+The decision process can be visualized as below.</p>
+<p><img src="imgs/basic-intro-to-ann/ANN_1.png" alt="" /></p>
+<p>Here is how I made the decision:<br />
+It's an action movie (+1 point) with a good rating (+1 point) and my friends are coming (+1 point). Total = +3<br />
+Now, my decision parameter is if I get a total of 3 points then I will go, else I won't.</p>
+<pre><code>(1) going if points = 3
+(0) not going if points &lt; 3
+</code></pre>
+<p>It is possible that I am ok with meeting just two of the criteria. In which case:</p>
+<pre><code>(1) going if points &gt;= 2
+(0) not going if points &lt; 2
+</code></pre>
+<p>This decision parameter is called an <strong>activation function</strong>. I am going to represent activation function as the following from now on.</p>
+<p><img src="imgs/basic-intro-to-ann/Activation.png" alt="" /></p>
+<p>If I am limited by budget then,</p>
+<p><img src="imgs/basic-intro-to-ann/ANN_2.png" alt="" /></p>
+<p>Here, I have introduced a penalty. Suppose the movie tickets do not fit my budget but all else holds true. I will calculate my points as:</p>
+<p><img src="imgs/basic-intro-to-ann/Points_Calc.png" alt="" /></p>
+<p>Since 1 &lt; 2 I will not be going for the movie.<br />
+These numbers on the edges between the nodes are called <strong>weights</strong>. So far I have covered weights and inputs. Let's try to write this in a generalized form.</p>
+<p>Let $$x_1$$ denote rating input, $$x_2$$ be action input and so on.<br />
+Let $$w_1$$ denote the weight between rating and output node. $$w_2$$ between action and output and so on.<br />
+The equation then becomes: $$x_1 w_1 + x_2 w_2 + x_3 w_3 + x_4 w_4$$</p>
+<p>This can be written as $$\sum_{i=1} ^4 x_i w_i$$</p>
+<p>Let f(x) be the activation function. Then the whole equation can be represented as: $$f(\sum_{i=1} ^4 x_i w_i)$$</p>
+<p>However, there is another term remaining called bias.<br />
+<strong>Bias</strong> is essentailly another input which is always on (set to 1). It is used to shift the activation threshold.</p>
+<p><img src="imgs/basic-intro-to-ann/Bias1.png" alt="" /></p>
+<p><strong>2 + 1 + 1 + 1 = 5 Going</strong></p>
+<p><img src="imgs/basic-intro-to-ann/Bias2.png" alt="" /></p>
+<p><strong>-2 + 1 + 1 + 1 = 1 Not going</strong></p>
+<p>This can be interpreted as, if I am a movie buff I will go in any case. If however, I don' like movies, I won't go at all. Now, these are the examples of two extreme cases but the idea that bias shifts the threshold of activation is clearly illustrated.<br />
+The general function now becomes:</p>
+<p>$$ f(\sum_{i=1} ^4 x_i w_i + b)$$</p>
+<p><img src="imgs/basic-intro-to-ann/General.png" alt="" /></p>
+<p><strong>General Architecture of Artificial Neuron</strong></p>
+<p>This is the general architecture of an artificial neuron. There are many different architectures of artificial neural networks such as RNNs, Feed-forward and Convolutional NN. Even different varieties of activation functions have't been explored. And, concepts such as back-propagation, momentum and dropouts haven't been touched. In the following posts, I am going to cover all these concepts.</p>
+<p>If you would like to create a neural network from scratch, head <a href="creating-neural-network-from-scratch-in-python.html">here</a>.</p>
+<p>Hey! You have reached the end 😎. Thanks for reading</p>
+</main><footer>© <a href="index.html">Ashwin Vaidya</a></footer></body></html>

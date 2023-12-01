@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang='en'><head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ashwin Vaidya</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;1,300&family=Noto+Sans:wght@200&display=swap"
+    rel="stylesheet"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/apprentice.min.css"
+  />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script
+    id="MathJax-script"
+    async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+  ></script>
+
+  <script>
+    hljs.highlightAll();
+  </script>
+</head>
+<body><header><a href="index.html" class="siteHeader">Ashwin Vaidya</a>
+<a class="aboutHeader" href="about.html">About</a>
+</header><main><div class='metadata'><span class='extra-info'>Originally published on 13th December 2018</span>|<span class='last-updated'>Last Updated: December 2023</span></div><h1 class='title'>K Nearest Neighbors</h1><div class='toc'><h2>Table of Contents</h2><ul>
+<li><a href="#implementation-using-sklearn">Implementation using sklearn</a></li>
+</ul>
+</div><p><em><span>(The following uses a barebones example merely for the purpose of </span>illustration)</em></p>
+<p>Consider that you have two species of trees in your neighbourhood. You collect their leaf size, leaf colour, height and other details. Now you plot this data on a graph using only the leaf size and the leaf colour. Something like this:</p>
+<p><img src="imgs/knn/First.jpg" alt="" /></p>
+<p>You now spot a new tree in your neighbourhood. To decide the species to which it belongs, you add it to your plot.</p>
+<p><img src="imgs/knn/Second.jpg" alt="" /></p>
+<p>How would you decide the species of this tree? Clearly, this new tree is closer to all the lower left ones. You can classify this with the others in the category.</p>
+<p>But is comparing with all the lower left trees necessary? Clearly not. You can consider just two nearest trees.</p>
+<p><img src="imgs/knn/Third.jpg" alt="" /></p>
+<p>This is essentially what K-Nearest Neighbors (KNN) is. Here k = 2. KNNs can be used for both <em>classification</em> (Identifying categories) and <em>regression</em> (Predicting continuous values) tasks. For this post, I am going to focus on <strong>classification</strong>. Further, KNNs are mostly used for classification purposes.</p>
+<p>Before I explain further, here is another detail. What if the new tree was located here in the graph.</p>
+<p><img src="imgs/knn/Fourth.jpg" alt="" /></p>
+<p>The two nearest neighbours are conflicting as they belong to two different species. Hence, as a rule of thumb, you should take <strong>k</strong> as an odd number. And suppose the number of classes (here species) is three then you should take k = 5.</p>
+<p>The distances between the points are calculated using the Euclidean distance formula.</p>
+<p>Consider the following two points. The shortest distance between the points is the length of the straight line joining the two.</p>
+<p>From the following figure, the distance can be calculated using the Pythagorean theorem.</p>
+<p>$$\sqrt{(x_2 - x_1)^2 + (y_1 - y_2)^2}$$</p>
+<p><img src="imgs/knn/EuclideanDist.jpg" alt="Euclidean distance plot" /></p>
+<p>This equation can be extended to multi-dimensional space as follows:</p>
+<p>$$\sqrt{\sum_{i = 1}^{n}(a_i - b_i)^2}$$</p>
+<p>K Nearest Neighbors essentially stores all the training data. The unknown class is determined based on the closet training examples. Hence, it comes in the category of <em>Lazy Learner</em>. This can be compared to <em>Eager Learners</em> (<a href="https://ashwinvaidya.com/blog/linear-regression/">Linear Regression</a>, <a href="https://ashwinvaidya.com/blog/decision-tree/">Decision Tree</a>) which builds a model to predict the class rather than remembering the training data.</p>
+<h2 id="implementation-using-sklearn">Implementation using sklearn</h2>
+<p>Now that we have the theory aside, let's quickly implement it using scikit-learn. For this example, I have taken the <a href="https://archive.ics.uci.edu/ml/datasets/iris">Iris dataset</a> and stored it in <em>data.csv</em> file.</p>
+<p><img src="imgs/knn/image-1.png" alt="" /></p>
+<p><strong>Iris Dataset</strong></p>
+<script src="https://gist.github.com/ashwinvaidya17/d72b02af7c767034902059b33f14868f.js"></script>
+</main><footer>© <a href="index.html">Ashwin Vaidya</a></footer></body></html>
