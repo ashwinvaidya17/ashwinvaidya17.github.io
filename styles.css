@@ -30,8 +30,9 @@ header {
   font-weight: bold;
   flex-grow: 1;
 }
-.aboutHeader {
+.headerLink {
   width: fit-content;
+  margin-left: 1rem;
 }
 a {
   text-decoration: none;
@@ -131,4 +132,26 @@ img {
 .card .card-text {
   font-size: 1.2rem;
   word-wrap: break-word;
+}
+
+.book-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2rem 0;
+}
+
+.book-container a {
+  text-decoration: none;
+  text-align: center;
+}
+
+.book-cover {
+  max-width: 300px;
+  margin-bottom: 1rem;
+  transition: transform 0.2s;
+}
+
+.book-cover:hover {
+  transform: scale(1.05);
 }
