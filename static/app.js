@@ -968,8 +968,12 @@
           .then((data) => {
             staticData = data;
             if (data.notes) renderNoteList(data.notes);
+            const sectionsArray =
+              data.sections && Array.isArray(data.sections.sections)
+                ? data.sections.sections
+                : data.sections;
             buildWelcomeSections(
-              data.sections ? { sections: data.sections } : data,
+              sectionsArray != null ? { sections: sectionsArray } : data,
             );
           })
           .catch(() => {
