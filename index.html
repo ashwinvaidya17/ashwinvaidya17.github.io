@@ -1,356 +1,148 @@
-<!DOCTYPE html><html lang='en'><head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ashwin Vaidya</title>
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;1,300&family=Noto+Sans:wght@200&display=swap"
-    rel="stylesheet"
-  />
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/apprentice.min.css"
-  />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script
-    id="MathJax-script"
-    async
-    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
-  ></script>
-
-  <script>
-    hljs.highlightAll();
-  </script>
-</head>
-<body><header>
-  <a href="index.html" class="siteHeader">Ashwin Vaidya</a>
-  <a class="headerLink" href="books.html">Books</a>
-  <a class="headerLink" href="about.html">About</a>
-</header>
-<main><h1>Posts</h1><div class='card-columns'>
-    <div class="card">
-        <a class="card-title" href="ghosts-of-our-former-selfs.html">Ghosts of Our Former Selfs</a>
-        <p class="last-updated">Last Updated: 30 March 2024</p>
-        <p class="card-text">If I were to point at an object that is very precious to me, I'd have a hard time. Is it my jacket I bought from my very first salary as a Teaching Assistant in a new country. Not only did it signify a mark of independence but has also accompanied me through everything in my Master's. All the ESN ev...</p>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ashwin Vaidya</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,400;1,300&family=Noto+Sans:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/base16/apprentice.min.css"
+    />
+    <link rel="stylesheet" href="static/style.css" />
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [
+            ["$", "$"],
+            ["\\(", "\\)"],
+          ],
+          displayMath: [
+            ["$$", "$$"],
+            ["\\[", "\\]"],
+          ],
+        },
+        options: { processHtmlClass: "pane" },
+      };
+    </script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="app">
+      <header class="tab-bar">
+        <div class="tab-bar-actions">
+          <button type="button" class="btn open-vault" title="Open note list">
+            [≡]
+          </button>
+        </div>
+        <div class="tab-bar-welcome">
+          <div class="welcome-box-row" id="welcome-box-row">
+            <span>Ashwin Vaidya</span>
+            <span class="welcome-sep">·</span>
+            <span><kbd>⌘K</kbd>/<kbd>Ctrl+K</kbd> search</span>
+            <span class="welcome-sep" id="welcome-section-sep">·</span>
+            <span id="welcome-section-links"></span>
+          </div>
+        </div>
+        <div class="tabs" role="tablist"></div>
+      </header>
+      <aside class="sidebar" id="sidebar" aria-hidden="true">
+        <div
+          class="sidebar-sections"
+          id="sidebar-sections"
+          aria-label="Sections"
+        ></div>
+        <div class="sidebar-header">
+          <h2>─ posts ─</h2>
+          <button type="button" class="btn close-sidebar" aria-label="Close">
+            ×
+          </button>
+        </div>
+        <ul class="note-list" id="note-list"></ul>
+      </aside>
+      <div class="content-and-toc">
+        <main class="content" id="content">
+          <div class="welcome" id="welcome">
+            <div id="welcome-sections"></div>
+          </div>
+          <div
+            class="panes-row"
+            id="pane-container"
+            aria-label="Note panes"
+          ></div>
+        </main>
+        <aside
+          class="toc-sidebar hidden"
+          id="toc-sidebar"
+          aria-label="Table of contents"
+        >
+          <div class="toc-header">Contents</div>
+          <nav class="toc-nav" id="toc-nav"></nav>
+        </aside>
+      </div>
+      <footer class="status-bar">
+        <div class="status-bar-inner">
+          <span class="status-segment status-segment-left"
+            >© Ashwin Vaidya</span
+          >
+          <div class="status-bar-right" id="status-path-wrap">
+            <span
+              class="status-chevron status-chevron-path"
+              id="status-chevron-path"
+              aria-hidden="true"
+            ></span>
+            <div
+              class="status-path-segments"
+              id="status-path"
+              aria-live="polite"
+              title=""
+            ></div>
+          </div>
+        </div>
+      </footer>
     </div>
-    
-    <div class="card">
-        <a class="card-title" href="layered-protection.html">Layered Protection</a>
-        <p class="last-updated">Last Updated: 17 March 2025</p>
-        <p class="card-text">I was watching Herb Sutter’s talk on the changes to C++. At one point in his slides, he showed this piece of code.
-auto f1(){
-    char a[] = {&#x27;s&#x27;, &#x27;e&#x27;, &#x27;c&#x27;, &#x27;r&#x27;, &#x27;e&#x27;, &#x27;t&#x27;};
-}
-
-auto f2(){
-    char a[6]; // or std::array&lt;char, 6&gt;
-    pr...</p>
+    <div
+      class="wiki-preview"
+      id="wiki-preview"
+      aria-hidden="true"
+      role="tooltip"
+    ></div>
+    <div class="fuzzy-overlay" id="fuzzy-overlay" aria-hidden="true">
+      <div class="fuzzy-dialog" role="dialog" aria-label="Search notes">
+        <div class="fuzzy-input-wrap">
+          <span class="fuzzy-prompt">&gt;</span>
+          <input
+            type="text"
+            class="fuzzy-input"
+            id="fuzzy-input"
+            placeholder=" search notes…"
+            autocomplete="off"
+          />
+        </div>
+        <ul class="fuzzy-results" id="fuzzy-results" role="listbox"></ul>
+        <div class="fuzzy-hint">↑↓ navigate enter open esc close</div>
+      </div>
     </div>
-    
-    <div class="card">
-        <a class="card-title" href="ready.html">Ready</a>
-        <p class="last-updated">Last Updated: 17 March 2025</p>
-        <p class="card-text">During COVID the only active thing I would do was run. Every weekend I would schedule a long run. It usually used to be around 20 kilometres. I must have done quite many half-marathons over the year. As everything opened up, I joined a squash association. It was at a competition that I was told by a...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="aggressive.html">Aggressive</a>
-        <p class="last-updated">Last Updated: 17 March 2025</p>
-        <p class="card-text">Aggression is an inner trait. It is the clawing feeling that makes you want to get up and go. It is the feeling that dissects failures and makes you get up early and spend the late nights honing your craft.
-It is directed outwards, not at others, but at your actions. It is the source of the initiati...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="valentines-day.html">Valentine's Day</a>
-        <p class="last-updated">Last Updated: 16 March 2025</p>
-        <p class="card-text">Valentine's day. That's the day when flowers are expensive and chocolates are marked up. The day for which reservations are made weeks in advance and you have been convinced that to love is to spend on expensive gifts.
-Valentine's day. That's the day I met you. That's the day I gathered the courage ...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="underground.html">Underground</a>
-        <p class="last-updated">Last Updated: 03 December 2023</p>
-        <p class="card-text">It is a strange thing to wake up every day in an underground chamber. But, today I am up earlier than usual. It is my 1-hour excursion outside. I can only do it an hour a week and that too in a heavy clumsy suit. I don’t hate it. It is designed to protect me. And afterall all this radiation from abo...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="optimize-your-present.html">Optimize Your Present</a>
-        <p class="last-updated">Last Updated: 03 December 2023</p>
-        <p class="card-text">We all go in life hoping to get the big break where we are free to pursue the hobbies we want, read the books on our list, pick up skills we always wanted, work on our ambitions or be who we aspired to be. The only issue is that the big break is somewhere in the distance outside our horizon. Life al...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="boston-dynamics-all-access-pass.html">Welcome to Boston Dynamics here is your all-access pass and the standard 12 gauge shotgun, remember if anything non-human starts asking questions you shoot it.</a>
-        <p class="last-updated">Last Updated: 03 December 2023</p>
-        <p class="card-text">Antony opened his eyes to see that he was sitting in an office. On the other side of the desk was a woman who said: “Welcome to Boston Dynamics” while smiling. “I see you took a moment to close your eyes.
-“I am sorry. Might have been the excitement”, said Antony.
-“Happens to all”, she said.
-At that ...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="speedster.html">Most people have some kind of super power. You’re a high level speedster but have absolutely no desire to be a hero. All you want to do is deliver your pizzas anywhere on earth in 30 minutes or less</a>
-        <p class="last-updated">Last Updated: 03 December 2023</p>
-        <p class="card-text">You don’t make a billion dollars a month delivering pizza. Well, not If you have powers like mine. I deliver pizza anywhere in the world in under 30mins. I operate from my house and make the pizza when the order comes in. My speed allows me to collect the ingredients when I need to make the pizza. I...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="virus.html">Virus?</a>
-        <p class="last-updated">Last Updated: 03 December 2023</p>
-        <p class="card-text">Today the world faces a threat from something we cannot see. Something that does not think. It’s not alive. It does not discriminate and had no vendetta against you. It is just doing its job; to make copies of itself. It does not make a strategy. You do. And you have failed. Now just change the part...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="into-the-storm.html">Into the Storm</a>
-        <p class="last-updated">Last Updated: 03 December 2023</p>
-        <p class="card-text">Well, now that you ask, Mr Jasper, there was this incident with this one man which was so peculiar that his disappearance keeps me up some nights. Not one that the Bureau was assigned to but which was so bizarre in its details that it still remains mysterious. According to everyone concerned, he was...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="emissaries-around-the-distant-sun.html">Emissaries Around The Distant Sun</a>
-        <p class="last-updated">Last Updated: 03 December 2023</p>
-        <p class="card-text">It is not an ordinary day when you make contact. I remember that day clearly. We detected their presence 10 years ago. And, at once sent a probe. It went into an orbit around a distant sun. It was to be joined by theirs. 9 years is a long time to communicate, yet the world remained excited when we f...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="a-cup-of-coffee.html">A Cup of Coffee for Alan</a>
-        <p class="last-updated">Last Updated: 03 December 2023</p>
-        <p class="card-text">“One medium cappuccino for Alan”, shouted the Barista from behind the counter. She didn’t have to. He was the only one there this early in the morning. He approached her and she gave him the smile of familiarity while handing him his coffee and the aluminium finished AstraSlate. Alan gave her a big ...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="into-the-void.html">Into the Void</a>
-        <p class="last-updated">Last Updated: 03 December 2023</p>
-        <p class="card-text">He had a rover to fix. The loose soil around the Veris crater gave in sending the it crashing into the crater. As he reached the edge of the Veris, he could make out the fallen rover. This height and the lack of atmosphere gave him a clear view of the stars. He could make out the Sagatus constellati...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="basics.html">Basics.</a>
-        <p class="last-updated">Last Updated: 02 December 2023</p>
-        <p class="card-text">There are certain things that you should do when playing Squash so that you are in a good position to remain in the rally, and, in most cases, win it by following these things. It’s the small things like having the proper racket preparation. Ensuring that you go back to the T after your shot. And, k...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="domains-of-warfare.html">Domains of Warfare</a>
-        <p class="last-updated">Last Updated: 02 December 2023</p>
-        <p class="card-text">A domain in warfare is where the weapons cause the damage. The air domain is dominated by missiles and aircrafts. Cross-domain warfare is when a weapon is launched from one domain and delivers destruction in a different domain. Surface to air missiles launch from the land domain and enter the air do...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="a-very-basic-introduction-to-artificial-neural-network.html">A Very Basic Introduction to Artificial Neural Network</a>
-        <p class="last-updated">Last Updated: 01 December 2023</p>
-        <p class="card-text">Yesterday, I was considering going for The Most Epic Action Movie Ever. Since it was an action movie, I was up right away. A quick search online revealed it having good ratings. That's great! I called my friends, informed my plans and they jumped in. All boxes ticked, so I went.
-The decision process...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="self-driving-car-using-genetic-algorithm-in-unity.html">Self Driving Car using Genetic Algorithm in Unity Engine</a>
-        <p class="last-updated">Last Updated: 01 December 2023</p>
-        <p class="card-text">I created a self-driving car in Unity engine using genetic algorithm. You can see the results:
-
-
-I took up this project after being inspired by these videos:
-
-
-Making the Neural Network
-To implement this the first step was to learn what a neural network is and how does it work.
-After spending a lot ...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="what-is-machine-learning.html">What is Machine Learning?</a>
-        <p class="last-updated">Last Updated: 01 December 2023</p>
-        <p class="card-text">
-
-  Photo by Franck V. on Unsplash
-
-What is Machine Learning?
-You and your friends are planning a mountaineering adventure. However, you do not have the heavy duty jacket to keep you warm. You log into a shopping site with a single day shipping promise. However, while you are shopping for the jacket...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="tech-in-fitness-trackers.html">Tech In Fitness Trackers</a>
-        <p class="last-updated">Last Updated: 01 December 2023</p>
-        <p class="card-text">Health has become a primary concern for many. From taking a walk to joining a gym, everyone is levelling up their fitness. With entrance of devices like Apple watch and Fitbit, you can now keep track of calories burned, stairs climbed, distance run, weight lost etc. And while these devices look tiny...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="creating-neural-network-from-scratch-in-python.html">Creating Neural Network from Scratch in Python</a>
-        <p class="last-updated">Last Updated: 01 December 2023</p>
-        <p class="card-text">In my previous post, I had introduced neural networks at a very high level. If you haven’t read that post then I suggest reading it first before continuing. It will give you an idea of what we are going to accomplish today.
-In this post, I am going to show you how to create your own neural network f...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="elonmusk-vs-neildegrassetyson-classifier.html">Elon Musk vs Neil Degrasse Tyson Image Classifier Using Tensorflow</a>
-        <p class="last-updated">Last Updated: 01 December 2023</p>
-        <p class="card-text">
-
-As part of my quest to learn Deep Learning, I wanted to make a classifier for images. One of the very first tutorials in Deep Learning that one will come across is a Cats vs Dogs classifier. So obviously I decided to implement it, except for one change. But since I am a big fan of Elon Musk and Ne...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="k-means-clustering.html">K-Means Clustering</a>
-        <p class="last-updated">Last Updated: 01 December 2023</p>
-        <p class="card-text">What is it?
-Suppose we have data of various users from a social media. The data might contain information regarding their friends, interests, posts, etc. This is an example of multidimensional data. Further, this data is unlabeled. Which means that we don’t know what we are looking for. Now, suppose...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="linear-regression.html">Linear Regression</a>
-        <p class="last-updated">Last Updated: 01 December 2023</p>
-        <p class="card-text">Suppose you are working in a space agency and you want to predict when the next solar flare might hit Earth. You then start collecting data such as the time when previous flares hit Earth, gamma-ray radiations received, etc. Then, you plot these variables and examine whether there is a relationship ...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="fashion-mnist-loader.html">Fashion MNIST Loader</a>
-        <p class="last-updated">Last Updated: 01 December 2023</p>
-        <p class="card-text">Motivation
-The fashion MNIST dataset is a replacement of the MNIST dataset. Like the 10 digits, it has 10 classes.
-
-  
-    
-      Label
-    
-    
-      Description
-    
-  
-  
-    
-    
-    
-      T-shirt/top
-    
-  
-  
-    
-      1
-    
-    
-      Trouser
-    
-  
-  
-    
-      2
-    
-    
-      Pull...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="decision-tree.html">Decision Trees</a>
-        <p class="last-updated">Last Updated: 01 December 2023</p>
-        <p class="card-text">Decision Trees
-Disclaimer: In the post, I have used NASA astronaut recruitment procedure for the example. I don't have any experience in it and do not work for NASA. ( At least not yet 🙂 ). The example is based on the information available here: https://www.nasa.gov/audience/forstudents/postsecondar...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="brain-machine-interfaces.html">Brain Machine Interfaces</a>
-        <p class="last-updated">Last Updated: 01 December 2023</p>
-        <p class="card-text">Remember the Matrix? Neo had these plugs connected to him which helped him enter the Matrix, where he could move, feel, fly or even stop bullets in mid-air. Or the movie Avatar, where Jake lies in a capsule which helps him control the Avatar. Sure they are all science fiction, but are we really far ...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="Generating-Strings-Using-Genetic-Algorithm.html">Generating Strings Using Genetic Algorithm</a>
-        <p class="last-updated">Last Updated: 01 December 2023</p>
-        <p class="card-text">Generating Strings Using Genetic Algorithm
-We have always looked at nature and tried to understand its processes. Understanding the movement of planets and stars gave us the theory of gravity. It enabled us to send humans to Moon and soon will help us reach Mars.
-Even with all our understanding of v...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="ai-environment-types.html">AI Environment Types</a>
-        <p class="last-updated">Last Updated: 01 December 2023</p>
-        <p class="card-text">
-
-  Photo by rawpixel on Unsplash
-
-An AI agent operates in an environment. For example, for a self-driving car, the environment is the road and for a chess-playing agent, the environment is the chessboard. Further, an environment might also have other agents operating on it. Like other autonomous ve...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="k-nearest-neighbors.html">K Nearest Neighbors</a>
-        <p class="last-updated">Last Updated: 01 December 2023</p>
-        <p class="card-text">(The following uses a barebones example merely for the purpose of illustration)
-Consider that you have two species of trees in your neighbourhood. You collect their leaf size, leaf colour, height and other details. Now you plot this data on a graph using only the leaf size and the leaf colour. Somet...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="broken-links-readibility-consolidation.html">Broken Links and Readibility</a>
-        <p class="last-updated">Last Updated: 01 December 2023</p>
-        <p class="card-text">In Service of the Reader.
-I like reading. Books, blogs, newsletters, flyers, magazines,... you get it. Major part of reading is the reading experience. Sometimes when I come across a blog that has a very clear design, I am delighted, and immediately in love with it. A clean design is a service to th...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="q-learning.html">Q Learning</a>
-        <p class="last-updated">Last Updated: 01 December 2023</p>
-        <p class="card-text">Quick Refresher on Reinforcement Learning
-Before I explain what Q Learning is, I will quickly explain the basic principle of reinforcement learning.
-Reinforcement learning is a category of machine learning algorithms where the systems learn on their own by interacting with the environment.
-
-The idea...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="Generating-faces-using-Deep-Convolutional-Generative-Adversarial-Network.html">Generating faces using Deep Convolutional Generative Adversarial Network (DCGAN)</a>
-        <p class="last-updated">Last Updated: 01 December 2023</p>
-        <p class="card-text">The internet is abundant with videos of algorithm turning horses to zebras or fake Obama giving a talk. Earlier people were obsessed with making their photos imitate some famous artist's style, now they are obsessed with looking old. All this is possible by a kind of neural network called Generative...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="Invisibility-Using-OpenCV.html">Invisibility Using OpenCV</a>
-        <p class="last-updated">Last Updated: 01 December 2023</p>
-        <p class="card-text">OpenCV is the go-to library for all your image processing needs. I used it to create my invisibility project.
-
-An object is invisible if you can see through it. The problem then becomes how do you show the background instead of the foreground object. A simple idea is to take a photo of the backgroun...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="what-is-artificial-intelligence.html">What is Artificial Intelligence</a>
-        <p class="last-updated">Last Updated: 01 December 2023</p>
-        <p class="card-text">
-
-  Photo by Franck V. on Unsplash
-
-What is Artificial Intelligence?
-Artificial Intelligence! The solution to all our problems or our future overlords? Whichever side you are on, this article attempts to broadly explain what comprises artificial intelligence.
-There are a lot of definitions for what ...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="Making-a-Telegram-Bot-for-My-Results.html">Making a Telegram Bot for My Results</a>
-        <p class="last-updated">Last Updated: 01 December 2023</p>
-        <p class="card-text">Chat bots are everywhere online - Slack, Discord, facebook messenger.
-Even my friend had created an amazing telegram bot which sends a message when the latest episode of your favourite anime is released.
-Inspired by his bot, I decided to make my own telegram bot.
-I had then recently given my final u...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="AutoEmailer.html">AutoEmailer</a>
-        <p class="last-updated">Last Updated: 01 December 2023</p>
-        <p class="card-text">During my undergraduate, I was part of an organization called MIT Computer Users Group (MCUG). The group conducted activities such as teaching Linux. At that time we also published a quarterly newsletter explaining the latest in technology. We only made two physical copies while distributed it in di...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="ai-that-writes-its-own-ai.html">A.I That Writes Its Own A.I</a>
-        <p class="last-updated">Last Updated: 01 December 2023</p>
-        <p class="card-text">Yep, you read that right. AI that writes its own AI. AutoML (automated machine learning) is a neural network that designs other neural networks. Sundar Pichai showed AutoML at the 2017 Google I/O. According to Google, it scored a record 82 per cent prediction accuracy in correctly classifying images...</p>
-    </div>
-    
-    <div class="card">
-        <a class="card-title" href="overfitting-vs-underfitting.html">Overfitting vs Underfitting</a>
-        <p class="last-updated">Last Updated: 01 December 2023</p>
-        <p class="card-text">Supervised learning tasks are divided into two types, classification and regression. In classification tasks, the machine learning model has to find the decision boundary between the class variables. For example, classifying whether a given image is of a star or a supernova.
-
-Classification
-
-With de...</p>
-    </div>
-    </div></main><footer>© <a href="index.html">Ashwin Vaidya</a></footer></body></html>
+    <script src="static/app.js"></script>
+    <script>
+      window.wikiTypeset = function (el) {
+        if (window.MathJax && window.MathJax.typesetPromise)
+          window.MathJax.typesetPromise([el]).catch(function () {});
+        if (window.hljs && el)
+          el.querySelectorAll("pre code").forEach(function (c) {
+            hljs.highlightElement(c);
+          });
+      };
+    </script>
+  </body>
+</html>
