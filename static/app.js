@@ -7,30 +7,405 @@
   const noteListEl = document.getElementById("note-list");
   const openVaultBtn = document.querySelector(".open-vault");
   const closeSidebarBtn = document.querySelector(".close-sidebar");
+  const themeCycleBtn = document.getElementById("theme-cycle");
   const fuzzyOverlay = document.getElementById("fuzzy-overlay");
   const fuzzyInput = document.getElementById("fuzzy-input");
   const fuzzyResults = document.getElementById("fuzzy-results");
+  const graphSvg = document.getElementById("graph-svg");
+  const graphModalOverlay = document.getElementById("graph-modal-overlay");
+  const graphModalSvg = document.getElementById("graph-modal-svg");
+  const closeGraphModalBtn = document.querySelector(".close-graph-modal");
+  const graphHeaderEl = document.getElementById("graph-header");
+  const graphSidebarEl = document.getElementById("graph-sidebar");
 
   let tabs = [];
   let activeTabId = null;
   let allNotes = [];
-  let staticData =
-    null; /* { notes, latest, notes_by_slug } when running as static site */
+  let staticData = window.__WIKI_PRELOADED || null;
+  const staticFlat = Boolean(window.__WIKI_STATIC_FLAT);
   let fuzzySelectedIndex = 0;
   let fuzzyFiltered = [];
+  let graphData = staticData && staticData.graph ? staticData.graph : null;
+  let themeMode = "system";
+  const graphViewportState = new WeakMap();
 
   function tabId(slug) {
     return "tab-" + slug;
   }
 
+  function applyTheme(mode) {
+    themeMode = mode === "light" || mode === "dark" ? mode : "system";
+    if (themeMode === "system") {
+      document.documentElement.removeAttribute("data-theme");
+    } else {
+      document.documentElement.setAttribute("data-theme", themeMode);
+    }
+    try {
+      localStorage.setItem("wiki-theme-mode", themeMode);
+    } catch (e) {}
+    if (themeCycleBtn) {
+      const icons = { system: "💻", light: "☀", dark: "🌙" };
+      themeCycleBtn.textContent = "[" + (icons[themeMode] || "💻") + "]";
+      themeCycleBtn.setAttribute("title", "Theme: " + themeMode);
+      themeCycleBtn.setAttribute("aria-label", "Theme mode: " + themeMode);
+    }
+  }
+
+  function initTheme() {
+    let stored = "system";
+    try {
+      stored = localStorage.getItem("wiki-theme-mode") || "system";
+    } catch (e) {}
+    applyTheme(stored);
+    if (themeCycleBtn) {
+      const order = ["system", "light", "dark"];
+      themeCycleBtn.addEventListener("click", () => {
+        const idx = order.indexOf(themeMode);
+        const next = order[(idx + 1) % order.length];
+        applyTheme(next);
+      });
+    }
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    media.addEventListener("change", () => {
+      if (themeMode === "system") {
+        document.documentElement.removeAttribute("data-theme");
+      }
+    });
+  }
+
   function parseNotePath() {
-    const m = /^\/note\/(.+)$/.exec(location.pathname);
-    return m ? decodeURIComponent(m[1]) : null;
+    const path = location.pathname.replace(/^\/+|\/+$/g, "");
+    if (!path || path === "notes" || path === "books") return null;
+    if (path.startsWith("api/") || path.startsWith("static/")) return null;
+    const segs = path.split("/");
+    if (segs[0] === "note") return decodeURIComponent(segs[1] || "");
+    return decodeURIComponent(segs[segs.length - 1] || "");
   }
 
   function setNotePath(slug) {
-    const path = "/note/" + encodeURIComponent(slug);
+    const path = "/" + encodeURIComponent(slug) + "/";
     if (location.pathname !== path) history.pushState({ slug }, "", path);
+  }
+
+  function colorForTag(tag) {
+    const palette = {
+      ai: "#f6c177",
+      ml: "#ebbcba",
+      story: "#9ccfd8",
+      systems: "#c4a7e7",
+      life: "#f2cdcd",
+      general: "#6e6a86",
+    };
+    const key = (tag || "general").toLowerCase();
+    return palette[key] || "#31748f";
+  }
+
+  function ensureGraphData() {
+    if (graphData) return Promise.resolve(graphData);
+    return fetch(API + "/graph")
+      .then((r) => r.json())
+      .then((data) => {
+        graphData = data;
+        return data;
+      });
+  }
+
+  function renderGraph(svgEl, data, activeSlug, large) {
+    if (!svgEl || !data || !Array.isArray(data.nodes)) return;
+    const width = svgEl.clientWidth || (large ? 900 : 220);
+    const height = svgEl.clientHeight || (large ? 620 : 200);
+    const nodes = data.nodes
+      .slice()
+      .sort((a, b) => a.title.localeCompare(b.title))
+      .map((n, i) => ({ ...n, i }));
+    const edges = Array.isArray(data.edges) ? data.edges : [];
+    const bySlug = new Map();
+    const pad = large ? 36 : 16;
+    const innerW = Math.max(1, width - pad * 2);
+    const innerH = Math.max(1, height - pad * 2);
+
+    // Initialize with deterministic pseudo-random positions for stable layouts.
+    function hash01(s) {
+      let h = 2166136261;
+      for (let i = 0; i < s.length; i++) {
+        h ^= s.charCodeAt(i);
+        h = Math.imul(h, 16777619);
+      }
+      return ((h >>> 0) % 10000) / 10000;
+    }
+    nodes.forEach((n) => {
+      const rx = hash01(n.slug + "x");
+      const ry = hash01(n.slug + "y");
+      n.x = pad + rx * innerW;
+      n.y = pad + ry * innerH;
+      bySlug.set(n.slug, n);
+    });
+
+    // Lightweight force-directed layout for a Quartz-like network look.
+    const k = Math.sqrt((innerW * innerH) / Math.max(nodes.length, 1));
+    const iterations = large ? 220 : 120;
+    let temp = Math.min(innerW, innerH) * (large ? 0.2 : 0.14);
+    const edgePairs = edges
+      .map((e) => [bySlug.get(e.source), bySlug.get(e.target)])
+      .filter((pair) => pair[0] && pair[1]);
+
+    for (let iter = 0; iter < iterations; iter++) {
+      nodes.forEach((n) => {
+        n.dx = 0;
+        n.dy = 0;
+      });
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const a = nodes[i];
+          const b = nodes[j];
+          let dx = a.x - b.x;
+          let dy = a.y - b.y;
+          let dist = Math.hypot(dx, dy) || 0.001;
+          const force = (k * k) / dist;
+          dx /= dist;
+          dy /= dist;
+          a.dx += dx * force;
+          a.dy += dy * force;
+          b.dx -= dx * force;
+          b.dy -= dy * force;
+        }
+      }
+      edgePairs.forEach(([a, b]) => {
+        let dx = a.x - b.x;
+        let dy = a.y - b.y;
+        let dist = Math.hypot(dx, dy) || 0.001;
+        const force = (dist * dist) / k;
+        dx /= dist;
+        dy /= dist;
+        a.dx -= dx * force;
+        a.dy -= dy * force;
+        b.dx += dx * force;
+        b.dy += dy * force;
+      });
+      nodes.forEach((n) => {
+        const disp = Math.hypot(n.dx, n.dy) || 0.001;
+        const step = Math.min(disp, temp);
+        n.x += (n.dx / disp) * step;
+        n.y += (n.dy / disp) * step;
+        n.x = Math.max(pad, Math.min(width - pad, n.x));
+        n.y = Math.max(pad, Math.min(height - pad, n.y));
+      });
+      temp *= 0.985;
+    }
+    const lines = edges
+      .map((e) => {
+        const s = bySlug.get(e.source);
+        const t = bySlug.get(e.target);
+        if (!s || !t) return "";
+        return (
+          '<line x1="' +
+          s.x.toFixed(1) +
+          '" y1="' +
+          s.y.toFixed(1) +
+          '" x2="' +
+          t.x.toFixed(1) +
+          '" y2="' +
+          t.y.toFixed(1) +
+          '" stroke="rgba(110,106,134,0.35)" stroke-width="1" />'
+        );
+      })
+      .join("");
+    const dots = nodes
+      .map((n) => {
+        const tag = Array.isArray(n.tags) && n.tags.length ? n.tags[0] : "general";
+        return (
+          '<g class="graph-node" data-slug="' +
+          escapeAttr(n.slug) +
+          '" data-title="' +
+          escapeAttr(n.title) +
+          '" data-x="' +
+          n.x.toFixed(1) +
+          '" data-y="' +
+          n.y.toFixed(1) +
+          '">' +
+          '<circle cx="' +
+          n.x.toFixed(1) +
+          '" cy="' +
+          n.y.toFixed(1) +
+          '" r="' +
+          (n.slug === activeSlug ? (large ? "8" : "6.5") : large ? "5.5" : "4.5") +
+          '" fill="' +
+          colorForTag(tag) +
+          '" stroke="' +
+          (n.slug === activeSlug ? "var(--accent)" : "transparent") +
+          '" stroke-width="2" />' +
+          '<title>' +
+          escapeHtml(n.title) +
+          " [" +
+          escapeHtml(tag) +
+          "]</title>" +
+          "</g>"
+        );
+      })
+      .join("");
+    const labels = nodes
+      .map(
+        (n) =>
+          '<text class="graph-label" data-slug="' +
+          escapeAttr(n.slug) +
+          '" data-title="' +
+          escapeAttr(n.title) +
+          '" x="' +
+          n.x.toFixed(1) +
+          '" y="' +
+          (n.y + (large ? 14 : 11)).toFixed(1) +
+          '">' +
+          escapeHtml(n.title) +
+          "</text>",
+      )
+      .join("");
+    svgEl.innerHTML =
+      '<g class="graph-viewport">' + lines + dots + labels + "</g>";
+
+    const state = {
+      x: 0,
+      y: 0,
+      zoom: 1,
+      minZoom: 0.5,
+      maxZoom: 4,
+      labelZoom: large ? 1.3 : 1.8,
+      dragging: false,
+      dragStartX: 0,
+      dragStartY: 0,
+      startX: 0,
+      startY: 0,
+    };
+    graphViewportState.set(svgEl, state);
+
+    function applyViewport() {
+      const s = graphViewportState.get(svgEl);
+      if (!s) return;
+      const viewport = svgEl.querySelector(".graph-viewport");
+      if (viewport) {
+        viewport.setAttribute(
+          "transform",
+          "translate(" + s.x.toFixed(1) + " " + s.y.toFixed(1) + ") scale(" + s.zoom.toFixed(3) + ")",
+        );
+      }
+      svgEl
+        .querySelectorAll(".graph-label")
+        .forEach((lbl) => lbl.classList.toggle("visible", s.zoom >= s.labelZoom));
+    }
+
+    applyViewport();
+
+    svgEl.onwheel = (e) => {
+      e.preventDefault();
+      const s = graphViewportState.get(svgEl);
+      if (!s) return;
+      const rect = svgEl.getBoundingClientRect();
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      const prevZoom = s.zoom;
+      const factor = e.deltaY < 0 ? 1.1 : 0.9;
+      s.zoom = Math.max(s.minZoom, Math.min(s.maxZoom, s.zoom * factor));
+      const ratio = s.zoom / prevZoom;
+      s.x = mx - (mx - s.x) * ratio;
+      s.y = my - (my - s.y) * ratio;
+      applyViewport();
+    };
+
+    svgEl.onpointerdown = (e) => {
+      if (e.target.closest(".graph-node")) return;
+      const s = graphViewportState.get(svgEl);
+      if (!s) return;
+      s.dragging = true;
+      s.dragStartX = e.clientX;
+      s.dragStartY = e.clientY;
+      s.startX = s.x;
+      s.startY = s.y;
+      svgEl.setPointerCapture(e.pointerId);
+    };
+
+    svgEl.onpointermove = (e) => {
+      const s = graphViewportState.get(svgEl);
+      if (!s || !s.dragging) return;
+      s.x = s.startX + (e.clientX - s.dragStartX);
+      s.y = s.startY + (e.clientY - s.dragStartY);
+      applyViewport();
+    };
+
+    svgEl.onpointerup = (e) => {
+      const s = graphViewportState.get(svgEl);
+      if (!s) return;
+      s.dragging = false;
+      try {
+        svgEl.releasePointerCapture(e.pointerId);
+      } catch (err) {}
+    };
+
+    svgEl.querySelectorAll(".graph-node").forEach((n) => {
+      n.addEventListener("click", () => {
+        closeGraphModal();
+        openNote(n.dataset.slug, n.dataset.title);
+      });
+      n.addEventListener("mouseenter", () => {
+        hideWikiPreview();
+        wikiPreviewTimeout = setTimeout(
+          () => showWikiPreview(n, n.dataset.slug),
+          WIKI_PREVIEW_DELAY_MS,
+        );
+      });
+      n.addEventListener("mouseleave", () => {
+        hideWikiPreview();
+      });
+    });
+    svgEl.querySelectorAll(".graph-label").forEach((lbl) => {
+      lbl.addEventListener("click", () => {
+        closeGraphModal();
+        openNote(lbl.dataset.slug, lbl.dataset.title);
+      });
+      lbl.addEventListener("mouseenter", () => {
+        hideWikiPreview();
+        wikiPreviewTimeout = setTimeout(
+          () => showWikiPreview(lbl, lbl.dataset.slug),
+          WIKI_PREVIEW_DELAY_MS,
+        );
+      });
+      lbl.addEventListener("mouseleave", () => {
+        hideWikiPreview();
+      });
+    });
+  }
+
+  function openGraphModal() {
+    if (!graphModalOverlay) return;
+    const activeTab = tabs.find((t) => t.id === activeTabId) || null;
+    graphModalOverlay.classList.add("open");
+    graphModalOverlay.setAttribute("aria-hidden", "false");
+    ensureGraphData()
+      .then((data) => renderGraph(graphModalSvg, data, activeTab && activeTab.slug, true))
+      .catch(() => {});
+  }
+
+  function closeGraphModal() {
+    if (!graphModalOverlay) return;
+    graphModalOverlay.classList.remove("open");
+    graphModalOverlay.setAttribute("aria-hidden", "true");
+  }
+
+  function renderSidebarGraph(tab) {
+    if (!tab) {
+      if (graphSvg) graphSvg.innerHTML = "";
+      rightSidebarHasGraph = false;
+      updateRightSidebarVisibility();
+      return;
+    }
+    ensureGraphData()
+      .then((data) => {
+        rightSidebarHasGraph = true;
+        updateRightSidebarVisibility();
+        renderGraph(graphSvg, data, tab.slug, false);
+      })
+      .catch(() => {
+        rightSidebarHasGraph = false;
+        updateRightSidebarVisibility();
+      });
   }
 
   function clearNotePath() {
@@ -38,6 +413,13 @@
   }
 
   function openNote(slug, title, options = {}) {
+    if (staticFlat) {
+      const target = "/" + encodeURIComponent(slug) + "/";
+      if (location.pathname !== target) {
+        location.assign(target);
+        return;
+      }
+    }
     const id = tabId(slug);
     const existing = tabs.find((t) => t.slug === slug);
     if (existing) {
@@ -55,6 +437,7 @@
       title: title || slug,
       html: null,
       extra_info: null,
+      backlinks: [],
       loaded: false,
     };
     tabs.push(tab);
@@ -65,23 +448,26 @@
   }
 
   function loadNoteContent(tab) {
-    if (tab.loaded && tab.html !== null) {
-      showPane(tab);
+    if (staticFlat && staticData && staticData.current_note) {
+      const data = staticData.current_note;
+      if (data.slug === tab.slug) {
+        tab.title = data.title;
+        tab.html = data.html;
+        tab.extra_info = data.extra_info ?? null;
+        tab.backlinks = data.backlinks || [];
+        tab.loaded = true;
+        showPane(tab);
+        renderBacklinksSidebar(tab);
+        renderSidebarGraph(tab);
+        updateTabTitle(tab);
+        attachWikiLinks(tab.id);
+        return;
+      }
+      location.assign("/" + encodeURIComponent(tab.slug) + "/");
       return;
     }
-    if (
-      staticData &&
-      staticData.notes_by_slug &&
-      staticData.notes_by_slug[tab.slug]
-    ) {
-      const data = staticData.notes_by_slug[tab.slug];
-      tab.title = data.title;
-      tab.html = data.html;
-      tab.extra_info = data.extra_info ?? null;
-      tab.loaded = true;
+    if (tab.loaded && tab.html !== null) {
       showPane(tab);
-      updateTabTitle(tab);
-      attachWikiLinks(tab.id);
       return;
     }
     fetch(`${API}/note/${encodeURIComponent(tab.slug)}`)
@@ -91,20 +477,27 @@
           tab.title = tab.slug;
           tab.html = "<p>Note not found.</p>";
           tab.extra_info = null;
+          tab.backlinks = [];
         } else {
           tab.title = data.title;
           tab.html = data.html;
           tab.extra_info = data.extra_info ?? null;
+          tab.backlinks = data.backlinks || [];
         }
         tab.loaded = true;
         showPane(tab);
+        renderBacklinksSidebar(tab);
+        renderSidebarGraph(tab);
         updateTabTitle(tab);
         attachWikiLinks(tab.id);
       })
       .catch(() => {
         tab.html = "<p>Failed to load note.</p>";
+        tab.backlinks = [];
         tab.loaded = true;
         showPane(tab);
+        renderBacklinksSidebar(tab);
+        renderSidebarGraph(tab);
       });
   }
 
@@ -164,7 +557,24 @@
       const preface = tab.extra_info
         ? '<div class="pane-preface">' + escapeHtml(tab.extra_info) + "</div>"
         : "";
-      pane.innerHTML = preface + (tab.html || "");
+      const backlinks =
+        tab.backlinks && tab.backlinks.length
+          ? '<section class="backlinks"><h3>Backlinks</h3><ul class="backlinks-list">' +
+            tab.backlinks
+              .map(
+                (b) =>
+                  '<li><a href="' +
+                  "/" + encodeURIComponent(b.slug) + "/" +
+                  '" class="wiki-link" data-wiki-page="' +
+                  escapeAttr(b.title) +
+                  '">' +
+                  escapeHtml(b.title) +
+                  "</a></li>",
+              )
+              .join("") +
+            "</ul></section>"
+          : "";
+      pane.innerHTML = preface + (tab.html || "") + backlinks;
       attachWikiLinks(tab.id);
       if (window.wikiTypeset) window.wikiTypeset(pane);
     }
@@ -228,22 +638,30 @@
         text: text + (text.length >= WIKI_PREVIEW_MAX_TEXT ? "…" : ""),
       });
     }
-    if (
-      staticData &&
-      staticData.notes_by_slug &&
-      staticData.notes_by_slug[slug]
-    ) {
-      const d = staticData.notes_by_slug[slug];
-      const div = document.createElement("div");
-      div.innerHTML = d.html;
-      const text = (div.textContent || "")
-        .trim()
-        .replace(/\s+/g, " ")
-        .slice(0, WIKI_PREVIEW_MAX_TEXT);
-      return cb({
-        title: d.title,
-        text: text + (text.length >= WIKI_PREVIEW_MAX_TEXT ? "…" : ""),
-      });
+    if (staticFlat && staticData && staticData.current_note) {
+      const d = staticData.current_note;
+      if (d.slug === slug) {
+        const div = document.createElement("div");
+        div.innerHTML = d.html;
+        const text = (div.textContent || "")
+          .trim()
+          .replace(/\s+/g, " ")
+          .slice(0, WIKI_PREVIEW_MAX_TEXT);
+        return cb({
+          title: d.title,
+          text: text + (text.length >= WIKI_PREVIEW_MAX_TEXT ? "…" : ""),
+        });
+      }
+      if (Array.isArray(staticData.latest)) {
+        const card = staticData.latest.find((n) => n.slug === slug);
+        if (card)
+          return cb({
+            title: card.title,
+            text:
+              (card.preview || "").slice(0, WIKI_PREVIEW_MAX_TEXT) +
+              ((card.preview || "").length >= WIKI_PREVIEW_MAX_TEXT ? "…" : ""),
+          });
+      }
     }
     fetch(`${API}/note/${encodeURIComponent(slug)}`)
       .then((r) => r.json())
@@ -307,6 +725,20 @@
       : "pane-" + paneOrTabId;
     const pane = document.getElementById(paneId);
     if (!pane) return;
+    const isInternalNoteHref = (href) => {
+      if (!href) return false;
+      if (!href.startsWith("/")) return false;
+      if (href.startsWith("/api/") || href.startsWith("/static/")) return false;
+      if (href === "/" || href === "/notes" || href === "/books") return false;
+      return true;
+    };
+    const slugFromInternalHref = (href) => {
+      const path = href.replace(/^\/+|\/+$/g, "");
+      if (!path) return null;
+      const segs = path.split("/");
+      if (segs[0] === "note") return decodeURIComponent(segs[1] || "");
+      return decodeURIComponent(segs[segs.length - 1] || "");
+    };
     pane.querySelectorAll("a.wiki-link").forEach((a) => {
       a.addEventListener("click", (e) => {
         e.preventDefault();
@@ -319,6 +751,27 @@
         const page = a.getAttribute("data-wiki-page") || a.textContent.trim();
         const slug = slugify(page);
         if (!slug) return;
+        wikiPreviewTimeout = setTimeout(
+          () => showWikiPreview(a, slug),
+          WIKI_PREVIEW_DELAY_MS,
+        );
+      });
+      a.addEventListener("mouseleave", () => {
+        hideWikiPreview();
+      });
+    });
+    pane.querySelectorAll("a[href]").forEach((a) => {
+      if (a.classList.contains("wiki-link")) return;
+      const href = a.getAttribute("href");
+      if (!isInternalNoteHref(href)) return;
+      const slug = slugFromInternalHref(href);
+      if (!slug) return;
+      a.addEventListener("click", (e) => {
+        e.preventDefault();
+        openNote(slug, a.textContent.trim() || slug);
+      });
+      a.addEventListener("mouseenter", () => {
+        hideWikiPreview();
         wikiPreviewTimeout = setTimeout(
           () => showWikiPreview(a, slug),
           WIKI_PREVIEW_DELAY_MS,
@@ -450,6 +903,62 @@
 
   const tocNavEl = document.getElementById("toc-nav");
   const tocSidebarEl = document.getElementById("toc-sidebar");
+  const tocHeaderEl = document.getElementById("toc-header");
+  const backlinksHeaderEl = document.getElementById("backlinks-header");
+  const backlinksNavEl = document.getElementById("backlinks-nav");
+  let rightSidebarHasToc = false;
+  let rightSidebarHasBacklinks = false;
+  let rightSidebarHasGraph = false;
+
+  function updateRightSidebarVisibility() {
+    if (!tocSidebarEl) return;
+    const showSidebar = rightSidebarHasToc || rightSidebarHasBacklinks || rightSidebarHasGraph;
+    tocSidebarEl.classList.toggle("hidden", !showSidebar);
+    if (tocHeaderEl) tocHeaderEl.classList.toggle("hidden", !rightSidebarHasToc);
+    if (tocNavEl) tocNavEl.classList.toggle("hidden", !rightSidebarHasToc);
+    if (backlinksHeaderEl)
+      backlinksHeaderEl.classList.toggle("hidden", !rightSidebarHasBacklinks);
+    if (backlinksNavEl)
+      backlinksNavEl.classList.toggle("hidden", !rightSidebarHasBacklinks);
+    if (graphHeaderEl) graphHeaderEl.classList.toggle("hidden", !rightSidebarHasGraph);
+    if (graphSidebarEl) graphSidebarEl.classList.toggle("hidden", !rightSidebarHasGraph);
+  }
+
+  function renderBacklinksSidebar(tab) {
+    if (!backlinksNavEl) return;
+    const backlinks = (tab && tab.backlinks) || [];
+    if (!backlinks.length) {
+      backlinksNavEl.innerHTML = "";
+      rightSidebarHasBacklinks = false;
+      updateRightSidebarVisibility();
+      return;
+    }
+    backlinksNavEl.innerHTML =
+      "<ul>" +
+      backlinks
+        .map(
+          (b) =>
+            '<li><a href="/' +
+            encodeURIComponent(b.slug) +
+            '/" data-slug="' +
+            escapeAttr(b.slug) +
+            '" data-title="' +
+            escapeAttr(b.title) +
+            '">' +
+            escapeHtml(b.title) +
+            "</a></li>",
+        )
+        .join("") +
+      "</ul>";
+    backlinksNavEl.querySelectorAll("a").forEach((a) => {
+      a.addEventListener("click", (e) => {
+        e.preventDefault();
+        openNote(a.dataset.slug, a.dataset.title);
+      });
+    });
+    rightSidebarHasBacklinks = true;
+    updateRightSidebarVisibility();
+  }
 
   function slugifyHeading(text) {
     return (
@@ -465,24 +974,21 @@
 
   function buildTOC(paneEl) {
     if (!tocNavEl) return;
-    const showTOC = function () {
-      if (tocSidebarEl) tocSidebarEl.classList.remove("hidden");
-    };
-    const hideTOC = function () {
-      if (tocSidebarEl) tocSidebarEl.classList.add("hidden");
-    };
     if (!paneEl) {
       tocNavEl.innerHTML = "";
-      hideTOC();
+      rightSidebarHasToc = false;
+      updateRightSidebarVisibility();
       return;
     }
     const headings = paneEl.querySelectorAll("h1, h2, h3");
     if (headings.length === 0) {
       tocNavEl.innerHTML = "";
-      hideTOC();
+      rightSidebarHasToc = false;
+      updateRightSidebarVisibility();
       return;
     }
-    showTOC();
+    rightSidebarHasToc = true;
+    updateRightSidebarVisibility();
     const nums = [0, 0, 0];
     const items = [];
     headings.forEach((h) => {
@@ -553,6 +1059,8 @@
     const tab = tabs.find((t) => t.id === id);
     if (tab) {
       showPane(tab);
+      renderBacklinksSidebar(tab);
+      renderSidebarGraph(tab);
       setNotePath(tab.slug);
     }
     updateStatusPath();
@@ -571,6 +1079,8 @@
       clearNotePath();
       renderTabBar();
       buildTOC(null);
+      renderBacklinksSidebar(null);
+      renderSidebarGraph(null);
       updateStatusPath();
       return;
     }
@@ -624,6 +1134,13 @@
     sidebarEl.classList.remove("open");
     sidebarEl.setAttribute("aria-hidden", "true");
   });
+  if (graphHeaderEl) graphHeaderEl.addEventListener("click", openGraphModal);
+  if (closeGraphModalBtn) closeGraphModalBtn.addEventListener("click", closeGraphModal);
+  if (graphModalOverlay) {
+    graphModalOverlay.addEventListener("click", (e) => {
+      if (e.target === graphModalOverlay) closeGraphModal();
+    });
+  }
 
   fuzzyInput.addEventListener("input", runFuzzySearch);
   fuzzyInput.addEventListener("keydown", (e) => {
@@ -649,6 +1166,9 @@
     if (e.target === fuzzyOverlay) closeFuzzySearch();
   });
   document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      closeGraphModal();
+    }
     if ((e.metaKey || e.ctrlKey) && e.key === "k") {
       e.preventDefault();
       if (fuzzyOverlay.classList.contains("open")) closeFuzzySearch();
@@ -946,6 +1466,17 @@
   }
 
   function loadNoteList() {
+    if (staticFlat && staticData) {
+      if (staticData.notes) renderNoteList(staticData.notes);
+      const sectionsArray =
+        staticData.sections && Array.isArray(staticData.sections.sections)
+          ? staticData.sections.sections
+          : staticData.sections;
+      buildWelcomeSections(
+        sectionsArray != null ? { sections: sectionsArray } : staticData,
+      );
+      return;
+    }
     fetch(API + "/notes")
       .then((r) => {
         if (r.ok) return r.json();
@@ -963,26 +1494,10 @@
         buildWelcomeSections(sectionsConfig);
       })
       .catch(() => {
-        fetch("notes.json")
-          .then((r) => r.json())
-          .then((data) => {
-            staticData = data;
-            if (data.notes) renderNoteList(data.notes);
-            const sectionsArray =
-              data.sections && Array.isArray(data.sections.sections)
-                ? data.sections.sections
-                : data.sections;
-            buildWelcomeSections(
-              sectionsArray != null ? { sections: sectionsArray } : data,
-            );
-          })
-          .catch(() => {
-            noteListEl.innerHTML =
-              '<li class="text-muted">Could not load notes.</li>';
-            buildWelcomeSections({
-              sections: [{ id: "latest", type: "notes", title: "Posts" }],
-            });
-          });
+        noteListEl.innerHTML = '<li class="text-muted">Could not load notes.</li>';
+        buildWelcomeSections({
+          sections: [{ id: "latest", type: "notes", title: "Posts" }],
+        });
       });
   }
 
@@ -1094,6 +1609,7 @@
   window.addEventListener("popstate", applyPath);
 
   loadNoteList();
+  initTheme();
   applyPath();
 
   window.wiki = { openNote, closeTab, setActiveTab };
