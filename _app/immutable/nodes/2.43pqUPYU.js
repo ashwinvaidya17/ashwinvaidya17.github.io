@@ -1,0 +1,1 @@
+import{U as e,W as t}from"../chunks/Cq3OVONK.js";import"../chunks/DXLwiZ0H.js";import{t as n}from"../chunks/DABDbITq.js";function r(r,i){t(i,!0),n(r,{get latest(){return i.data.latest},get sections(){return i.data.sections}}),e()}export{r as component};
