@@ -1,1 +1,0 @@
-import{U as e,W as t,j as n,n as r}from"../chunks/Cq3OVONK.js";import"../chunks/DXLwiZ0H.js";import{a as i,i as a}from"../chunks/BQuUrdBq.js";function o(o,s){t(s,!0),r(()=>{a(),i(s.data.note.slug)}),n(()=>{i(s.data.note.slug)}),e()}export{o as component};
